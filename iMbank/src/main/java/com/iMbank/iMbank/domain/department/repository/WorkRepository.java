@@ -20,8 +20,8 @@ public interface WorkRepository extends JpaRepository<Work, Integer> {
     @Query("SELECT w.work_dvcd FROM Work w WHERE w.work_dvcd_nm = :workDvcdNm AND w.department = :deptId")
     String findWorkDvcdByWorkDvcdNm(String workDvcdNm, Department deptId );
 
-    @Query("SELECT w FROM Work w WHERE w.work_dvcd_nm = :workDvcdNm")
-    Work findWorkByWorkDvcdNm(String workDvcdNm);
+    @Query("SELECT w FROM Work w WHERE w.dept_nm = :deptNm AND w.work_dvcd_nm = :workDvcdNm")
+    Work findWorkByWorkDvcdNm(String deptNm, String workDvcdNm);
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM Work w WHERE w.dept_nm = :deptNm AND w.work_dvcd_nm = :workNm")

@@ -36,8 +36,6 @@ public class MemberController {
         return ResponseEntity.ok().body(Message.success());
     }
 
-
-
     @PostMapping("/login")
     public ResponseEntity<Message<MemberLoginResponse>> loginMember(@RequestBody MemberLoginRequest loginRequest,
                                                                     HttpServletResponse response) {
@@ -71,7 +69,7 @@ public class MemberController {
     }
 
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     @PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteMember(@AuthenticationPrincipal MemberLoginActive loginActive) {
         memberService.deleteMember(loginActive.id());
@@ -86,7 +84,7 @@ public class MemberController {
     }
 
     // 버튼 추가
-    @PostMapping("/add/button")
+    @PostMapping("/button")
     @PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<String>> addButton(@AuthenticationPrincipal MemberLoginActive loginActive,
                                                    @RequestBody CreateButtonRequest createButtonRequest) {
@@ -96,24 +94,25 @@ public class MemberController {
     }
 
 
-    // 버튼 추가
-    @PatchMapping("/modify/button")
+    // 버튼 수정
+    @PatchMapping("/button")
     @PreAuthorize("hasAuthority('BRANCH')")
-    public ResponseEntity<Message<String>> modifyButton(@AuthenticationPrincipal MemberLoginActive loginActive,
+    public ResponseEntity<Message<Void>> modifyButton(@AuthenticationPrincipal MemberLoginActive loginActive,
                                                         @RequestBody ModifyButtonRequest modifyButtonRequest) {
         memberService.modifyButton(modifyButtonRequest);
         String reissueAccessToken = jwtTokenService.reissueAccessToken(loginActive.email());
-        return ResponseEntity.ok().body(Message.success(reissueAccessToken));
+        return ResponseEntity.ok().body(Message.success());
     }
 
-    // 버튼 추가
-    @DeleteMapping("/delete/button")
+    // 버튼 삭제
+    @DeleteMapping("/button/{deptNm}/{workDvcdNm}")
     @PreAuthorize("hasAuthority('BRANCH')")
-    public ResponseEntity<Message<String>> deleteButton(@AuthenticationPrincipal MemberLoginActive loginActive,
-                                                        @RequestBody CreateButtonRequest createButtonRequest) {
+    public ResponseEntity<Message<Void>> deleteButton(@AuthenticationPrincipal MemberLoginActive loginActive,
+                                                        @PathVariable String deptNm, @PathVariable String workDvcdNm) {
+        CreateButtonRequest createButtonRequest = new CreateButtonRequest(deptNm, workDvcdNm);
         memberService.deleteButton(createButtonRequest);
         String reissueAccessToken = jwtTokenService.reissueAccessToken(loginActive.email());
-        return ResponseEntity.ok().body(Message.success(reissueAccessToken));
+        return ResponseEntity.ok().body(Message.success());
     }
 
     // 버튼 리스트 가져오기

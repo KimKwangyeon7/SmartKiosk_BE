@@ -127,7 +127,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void modifyButton(ModifyButtonRequest modifyButtonRequest) {
-        Work work = workRepository.findWorkByWorkDvcdNm(modifyButtonRequest.old_work_dvcd_nm());
+        Work work = workRepository.findWorkByWorkDvcdNm(modifyButtonRequest.dept_nm(), modifyButtonRequest.old_work_dvcd_nm());
         work.setWork_dvcd_nm(modifyButtonRequest.new_work_dvcd_nm());
         workRepository.save(work);
     }
