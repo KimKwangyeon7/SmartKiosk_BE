@@ -12,7 +12,7 @@ public interface StatisticsService {
     DailyCsnlCntResponse getDailyCnt(String deptNm);
     PeriodCntResponse getPeriodCnt(String deptNm, String year);
     Map<String, Long> getWorkPercentage(String deptNm);
-    Map<Integer, Integer> getAvgCntByTime(String deptNm);
+    Map<Integer, Double> getAvgCntByTime(String deptNm);
     Map<String, Long> getWicketPercentage(String deptNm);
     AvgWaitTimeResponse getAvgWaitTime(String deptNm);
     YearCntResponse getYearCnt(String deptNm);

@@ -21,7 +21,7 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    // 업무별 고객 1명당 걸리는 평균 상담 시간
+    // 업무별 고객 1명당 걸리는 평균 상담 시간 O
     @PostMapping("/code")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<AvgCsnlTimeResponse>> getAvgCsnlTime(@RequestParam String deptNm) {
@@ -29,7 +29,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(avgCsnlTimeResponse));
     }
 
-    // 업무별 고객 1명당 걸리는 평균 대기 시간
+    // 업무별 고객 1명당 걸리는 평균 대기 시간 O
     @PostMapping("/wait")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<AvgWaitTimeResponse>> getAvgWaitTime(@RequestParam String deptNm) {
@@ -37,7 +37,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(avgWaitTimeResponse));
     }
 
-    // 요일별 평균 고객 수
+    // 요일별 평균 고객 수 O
     @PostMapping("/day")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<DailyCsnlCntResponse>> getDailyCsnlTime(@RequestParam String deptNm) {
@@ -45,7 +45,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(dailyCsnlCntResponse));
     }
 
-    // 분기별 고객 수 변화 - 영업별 => 년도
+    // 분기별 고객 수 변화 - 영업별 => 년도 O
     @PostMapping("/period")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<PeriodCntResponse>> getPeriodCnt(@RequestParam String deptNm, @RequestParam String year) {
@@ -53,7 +53,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(map));
     }
 
-    // 최근 5년간 고객 수 변화 - 영업별 => 년도 => 전체와 비교
+    // 최근 5년간 고객 수 변화 - 영업별 => 년도 => 전체와 비교 O
     @PostMapping("/year")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<YearCntResponse>> getYearCnt(@RequestParam String deptNm) {
@@ -61,7 +61,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(map));
     }
 
-    // 업무별 총 고객 수에서 차지하는 비율
+    // 업무별 총 고객 수에서 차지하는 비율 O
     @PostMapping("/work")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<Map<String, Long>>> getWorkPercentage(@RequestParam String deptNm) {
@@ -69,11 +69,11 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(map));
     }
 
-    // 시간대별 고객 평균
+    // 시간대별 고객 평균 O
     @PostMapping("/time")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
-    public ResponseEntity<Message<Map<Integer, Integer>>> getAvgCntByTime(@RequestParam String deptNm) {
-        Map<Integer, Integer> map = statisticsService.getAvgCntByTime(deptNm);
+    public ResponseEntity<Message<Map<Integer, Double>>> getAvgCntByTime(@RequestParam String deptNm) {
+        Map<Integer, Double> map = statisticsService.getAvgCntByTime(deptNm);
         return ResponseEntity.ok().body(Message.success(map));
     }
 
@@ -85,7 +85,7 @@ public class StatisticsController {
         return ResponseEntity.ok().body(Message.success(map));
     }
 
-    // 창구 중 업무 비율
+    // 창구 중 업무 비율 O
     @PostMapping("/wicket")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
     public ResponseEntity<Message<Map<String, Long>>> getWicketPercentage(@RequestParam String deptNm) {

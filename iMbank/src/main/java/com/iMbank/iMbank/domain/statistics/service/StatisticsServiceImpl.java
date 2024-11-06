@@ -132,6 +132,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new YearCntResponse(my, other);
     }
 
+    // 분기별 고객수 (업무별)
     @Override
     public PeriodCntResponse getPeriodCnt(String deptNm, String year){
         // 특정 영업점의 업무 관련 테이블 존재 -> 추후 고치기
@@ -158,6 +159,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new PeriodCntResponse(my, other);
     }
 
+    // 업무 비율 O
     @Override
     public Map<String, Long> getWorkPercentage(String deptNm) {
         List<String> list = getAllWorks(deptNm);
@@ -174,6 +176,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return map;
     }
 
+    // 년, 월에 맞는 고객수(업무 유형별)
     @Override
     public Map<String, List<Long>> getAvgCntByMonth(String deptNm, String year, String month) {
         Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
@@ -189,11 +192,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         return map;
     }
 
+    // 지난 4달 동안의 시간대별 고객 수
     @Override
-    public Map<Integer, Integer> getAvgCntByTime(String deptNm) {
+    public Map<Integer, Double> getAvgCntByTime(String deptNm) {
         int stime = Integer.parseInt(departmentRepository.findStimeByDeptNm(deptNm).substring(0, 2));
         int etime = Integer.parseInt(departmentRepository.findEtimeByDeptNm(deptNm).substring(0, 2));
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Double> map = new HashMap<>();
         Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
         LocalDateTime now = LocalDateTime.now();
         int month = now.getMonthValue()-1;
@@ -209,17 +213,17 @@ public class StatisticsServiceImpl implements StatisticsService {
                 str = "0" + str;
             }
             String tmp = year + str;
+            System.out.println(tmp);
             for (int i = stime; i < etime; i++) {
                 int cnt = counselRepository.getCntByTime(dept, i, tmp);
-                map.put(i, map.getOrDefault(i, 0) + cnt);
+                map.put(i, map.getOrDefault(i, 0.0) + cnt);
             }
         }
-        for (int key: map.keySet()){
-            map.put(key, map.get(key)/4);
-        }
+        map.replaceAll((k, v) -> map.get(k)/4);
         return map;
     }
 
+    // 해당 지점 창구 비율 O
     @Override
     public Map<String, Long> getWicketPercentage(String deptNm) {
         List<String> codes = getAllWorks(deptNm);
