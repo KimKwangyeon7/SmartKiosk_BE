@@ -98,11 +98,12 @@ public class WicketServiceImpl implements WicketService {
                 int x = Integer.parseInt(map.get("to").split(",")[0]);
                 int y = Integer.parseInt(map.get("to").split(",")[1]);
                 int counterNum = Integer.parseInt(map.get("counterName").split(",")[0].substring(3));
+                System.out.println("counterNum: " + counterNum);
                 int counterId = Integer.parseInt(map.get("counterName").split(",")[1]);
-
+                System.out.println("counterId: " + counterId);
                 Wicket wicket = wicketRepository.findByWd_id(counterId);
                 wicket.setRowNum(x);
-                wicket.setRowNum(y);
+                wicket.setColNum(y);
                 wicket.setWd_num(counterNum);
 
                 wicketRepository.save(wicket);
