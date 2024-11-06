@@ -4,15 +4,14 @@ import com.iMbank.iMbank.domain.counsel.repository.CounselRepository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.department.repository.DepartmentRepository;
 import com.iMbank.iMbank.domain.department.repository.WorkRepository;
-import com.iMbank.iMbank.domain.statistics.dto.AvgCsnlTimeResponse;
-import com.iMbank.iMbank.domain.statistics.dto.AvgWaitTimeResponse;
-import com.iMbank.iMbank.domain.statistics.dto.DailyCsnlCntResponse;
+import com.iMbank.iMbank.domain.statistics.dto.*;
 import com.iMbank.iMbank.domain.wicket.repository.WicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +43,9 @@ public class StatisticsServiceImpl implements StatisticsService {
             }
         }
         Map<String, Double> other = new HashMap<>();
-        //Set<String> keySet = map.keySet();
 
         for (String code: list){
-            Double avg = counselRepository.getOtherAvgCsnlTime(dept, code);
+            Double avg = counselRepository.getOtherAvgCsnlTime(code);
             avg = avg == null ? 0 : avg;
             String codeName = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(deptNm, code);
             other.put(codeName, avg);
@@ -75,7 +73,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         //Set<String> keySet = map.keySet();
 
         for (String code: list){
-            Double avg = counselRepository.getOtherAvgWaitTime(dept, code);
+            Double avg = counselRepository.getOtherAvgWaitTime(code);
             avg = avg == null ? 0 : avg;
             String codeName = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(deptNm, code);
             other.put(codeName, avg);
@@ -84,6 +82,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new AvgWaitTimeResponse(map, other);
 
     }
+
+
 
     @Override
     public DailyCsnlCntResponse getDailyCnt(String deptNm) {
@@ -113,25 +113,48 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new DailyCsnlCntResponse(map, other);
     }
 
+
     @Override
-    public Map<String, Map<Integer, Long>> getPeriodCnt(String deptNm, String year){
+    public YearCntResponse getYearCnt(String deptNm) {
+        List<String> list = getAllWorks(deptNm);
+        Map<String, Map<String, Long>> my = new HashMap<>();
+        Map<String, Map<String, Long>> other = new HashMap<>();
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
+        for (String code: list){
+            YearCntInfo res = counselRepository.getCntByDeptAndYear(dept, code, year);
+            String codeName = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(deptNm, code);
+            my.put(codeName, res.my());
+            other.put(codeName, res.other());
+        }
+        return new YearCntResponse(my, other);
+    }
+
+    @Override
+    public PeriodCntResponse getPeriodCnt(String deptNm, String year){
         // 특정 영업점의 업무 관련 테이블 존재 -> 추후 고치기
         List<String> list = getAllWorks(deptNm);
 
-        Map<String, Map<Integer, Long>> map = new HashMap<>();
+        Map<String, Map<Integer, Long>> my = new HashMap<>();
+        Map<String, Map<Integer, Long>> other = new HashMap<>();
+        Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
+
         for (String code: list){
-            Map<Integer, Long> period = new HashMap<>();
+            Map<Integer, Long> myPeriod = new HashMap<>();
+            Map<Integer, Long> otherPeriod = new HashMap<>();
             for (int i = 1; i < 5; i++){
-                Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
                 if (dept != null) {
-                    long sum = counselRepository.getPeriodCnt(dept, code, year, i);
-                    period.put(i, sum);
+                    PeriodCntInfo pci = counselRepository.getPeriodCnt(dept, code, year, i);
+                    myPeriod.put(i, pci.my());
+                    otherPeriod.put(i, pci.other());
                 }
             }
             String codeName = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(deptNm, code);
-            map.put(codeName, period);
+            my.put(codeName, myPeriod);
+            other.put(codeName, otherPeriod);
         }
-        return map;
+        return new PeriodCntResponse(my, other);
     }
 
     @Override
@@ -151,14 +174,17 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public Map<Integer, Integer> getAvgCntByTime(String deptNm) {
+    public Map<Integer, Integer> getAvgCntByTime(String deptNm, int month) {
         int stime = Integer.parseInt(departmentRepository.findStimeByDeptNm(deptNm).substring(0, 2));
         int etime = Integer.parseInt(departmentRepository.findEtimeByDeptNm(deptNm).substring(0, 2));
         Map<Integer, Integer> map = new HashMap<>();
         Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
-        String month = "11";
+        String str = "" + month;
+        if (month < 10){
+            str = "0" + str;
+        }
         for (int i = stime; i < etime; i++){
-            int cnt = counselRepository.getCntByTime(dept, i, month);
+            int cnt = counselRepository.getCntByTime(dept, i, str);
             map.put(i, cnt);
         }
         return map;
