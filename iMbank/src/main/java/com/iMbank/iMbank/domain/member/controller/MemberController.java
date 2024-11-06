@@ -43,7 +43,7 @@ public class MemberController {
         // JWT 토큰을 쿠키에 저장
         Cookie accessTokenCookie = new Cookie("accessToken", loginResponse.tokenInfo().accessToken());
         accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(300); // 5분(300초)
+        accessTokenCookie.setMaxAge(25200); // 4200분(25200초)
         response.addCookie(accessTokenCookie);
         return ResponseEntity.ok().body(Message.success(loginResponse));
     }
@@ -86,21 +86,17 @@ public class MemberController {
     // 버튼 추가
     @PostMapping("/button")
     @PreAuthorize("hasAuthority('BRANCH')")
-    public ResponseEntity<Message<String>> addButton(@AuthenticationPrincipal MemberLoginActive loginActive,
-                                                   @RequestBody CreateButtonRequest createButtonRequest) {
+    public ResponseEntity<Message<Void>> addButton(@RequestBody CreateButtonRequest createButtonRequest) {
         memberService.addButton(createButtonRequest);
-        String reissueAccessToken = jwtTokenService.reissueAccessToken(loginActive.email());
-        return ResponseEntity.ok().body(Message.success(reissueAccessToken));
+        return ResponseEntity.ok().body(Message.success());
     }
 
 
     // 버튼 수정
     @PatchMapping("/button")
     @PreAuthorize("hasAuthority('BRANCH')")
-    public ResponseEntity<Message<Void>> modifyButton(@AuthenticationPrincipal MemberLoginActive loginActive,
-                                                        @RequestBody ModifyButtonRequest modifyButtonRequest) {
+    public ResponseEntity<Message<Void>> modifyButton(@RequestBody ModifyButtonRequest modifyButtonRequest) {
         memberService.modifyButton(modifyButtonRequest);
-        String reissueAccessToken = jwtTokenService.reissueAccessToken(loginActive.email());
         return ResponseEntity.ok().body(Message.success());
     }
 
@@ -121,8 +117,4 @@ public class MemberController {
         List<ButtonInfoResponse> buttonInfoResponses = memberService.getButtonInfo(deptNm);
         return ResponseEntity.ok().body(Message.success(buttonInfoResponses));
     }
-//    @PatchMapping("/add/button")
-//    public ResponseEntity<Message<>> addButton(@PathVariable ){
-//
-//    }
 }
