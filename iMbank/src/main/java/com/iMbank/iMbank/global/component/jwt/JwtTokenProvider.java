@@ -31,7 +31,7 @@ public class JwtTokenProvider {
 
     private static final String CLAIM_EMAIL = "email";
     private static final String CLAIM_NAME = "name";
-    private static final String CLAIM_NICKNAME = "nickname";
+    private static final String CLAIM_DEPT_NM = "deptNm";
     private static final String CLAIM_PROFILE_IMAGE = "profileImage";
     private static final String CLAIM_ROLE = "role";
 
@@ -47,7 +47,7 @@ public class JwtTokenProvider {
                 .id(String.valueOf(member.getUser_id()))
                 .add(CLAIM_EMAIL, member.getEmail())
                 .add(CLAIM_NAME, member.getName())
-                .add(CLAIM_NICKNAME, member.getNickname())
+                .add(CLAIM_DEPT_NM, member.getDept_nm())
                 .add(CLAIM_PROFILE_IMAGE, member.getProfileImage())
                 .add(CLAIM_ROLE, member.getRole())
                 .build();
@@ -85,7 +85,7 @@ public class JwtTokenProvider {
                 Integer.parseInt(payload.getId()),
                 payload.get(CLAIM_EMAIL, String.class),
                 payload.get(CLAIM_NAME, String.class),
-                payload.get(CLAIM_NICKNAME, String.class),
+                payload.get(CLAIM_DEPT_NM, String.class),
                 MemberRole.fromName(payload.get(CLAIM_ROLE, String.class))
         );
     }

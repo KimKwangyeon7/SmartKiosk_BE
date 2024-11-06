@@ -15,7 +15,6 @@ public class MemberSignupRequest {
     @NotNull(message = "User ID는 null일 수 없습니다.")
     private Integer user_id;
 
-
     @NotBlank(message = "이메일은 필수 입력값입니다")
     @Email(message = "이메일 형식이 올바르지 않습니다")
     private String email;
@@ -29,6 +28,9 @@ public class MemberSignupRequest {
     @Size(min = 2, max = 18, message = "닉네임은 2자 이상 18자 이하로 입력해주세요.")
     private String nickname;
 
+    @Size(min = 2, max = 18, message = "소속 지점명을 입력해주세요.")
+    private String deptNm;
+
     private String profileImage;
 
     public Member toEntity() {
@@ -37,8 +39,7 @@ public class MemberSignupRequest {
                 .email(email)
                 .password(password)
                 .name(name)
-                .nickname(nickname)
-                .profileImage(profileImage)
+                .dept_nm(deptNm)
                 .role(MemberRole.BRANCH)
                 .build();
     }

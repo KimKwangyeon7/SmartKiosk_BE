@@ -6,7 +6,7 @@ public record MemberLoginActive(
         int id,
         String email,
         String name,
-        String nickname,
+        String dept_nm,
         MemberRole role
 ) {
 }
