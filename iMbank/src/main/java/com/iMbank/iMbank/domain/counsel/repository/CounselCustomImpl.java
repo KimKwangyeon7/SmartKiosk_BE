@@ -2,6 +2,8 @@ package com.iMbank.iMbank.domain.counsel.repository;
 
 import com.iMbank.iMbank.domain.counsel.entity.QCounsel;
 import com.iMbank.iMbank.domain.department.entity.Department;
+import com.iMbank.iMbank.domain.statistics.dto.PeriodCntInfo;
+import com.iMbank.iMbank.domain.statistics.dto.YearCntInfo;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +101,7 @@ public class CounselCustomImpl implements CounselCustom {
     }
 
     @Override
-    public long getPeriodCnt(Department deptId, String code, String year, int period) {
+    public PeriodCntInfo getPeriodCnt(Department deptId, String code, String year, int period) {
         QCounsel c = QCounsel.counsel;
 
         // 시작 및 종료 범위 계산
@@ -107,7 +109,7 @@ public class CounselCustomImpl implements CounselCustom {
         int end = Integer.parseInt(year) * 10000 + (3 + 3 * (period - 1)) * 100 + 32;
 
         // 쿼리 결과를 Long으로 받아온 후 null 처리 및 double로 변환
-        Long count = queryFactory
+        Long myCount = queryFactory
                 .select(c.counsel_id.count())
                 .from(c)
                 .where(c.department.eq(deptId)
@@ -116,8 +118,55 @@ public class CounselCustomImpl implements CounselCustom {
                         .and(c.csnl_cd.eq("02")))
                 .fetchOne();
 
+        Long otherCount = queryFactory
+                .select(c.counsel_id.count())
+                .from(c)
+                .where(c.user_dvcd.eq(code)
+                        .and(c.crdt.between("" + start, "" + end))
+                        .and(c.csnl_cd.eq("02")))
+                .fetchOne();
+
         // null일 경우 0.0으로 반환하고 아닐 경우 double로 변환
-        return count != null ? count : 0;
+        myCount = myCount != null ? myCount : 0;
+        otherCount = otherCount != null ? otherCount : 0;
+        return new PeriodCntInfo(myCount, otherCount);
+    }
+
+    @Override
+    public YearCntInfo getCntByDeptAndYear(Department dept, String code, int yyear) {
+        QCounsel c = QCounsel.counsel;
+        int year =  yyear - 4;
+        Map<String, Long> my = new HashMap<>();
+        for (int i = 0; i < 5; i++) {
+            String syear = "" + year;
+            Long count = queryFactory
+                    .select(c.counsel_id.count())
+                    .from(c)
+                    .where(c.department.eq(dept)
+                            .and(c.user_dvcd.eq(code))
+                            .and(c.crdt.substring(0, 4).eq(syear))
+                            .and(c.csnl_cd.eq("02")))
+                    .fetchOne();
+            my.put(syear, count != null ? count : 0);
+            year++;
+        }
+
+        year = yyear - 4;
+        Map<String, Long> other = new HashMap<>();
+        for (int i = 0; i < 5; i++) {
+            String syear = "" + year;
+            Long count = queryFactory
+                    .select(c.counsel_id.count())
+                    .from(c)
+                    .where(c.user_dvcd.eq(code)
+                            .and(c.crdt.substring(0, 4).eq(syear))
+                            .and(c.csnl_cd.eq("02")))
+                    .fetchOne();
+            other.put(syear, count != null ? count : 0);
+            year++;
+        }
+
+        return new YearCntInfo(my, other);
     }
 
 }

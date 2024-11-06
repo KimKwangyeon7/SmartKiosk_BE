@@ -18,17 +18,17 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
             "AND c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
     Double getAvgCsnlTime(Department deptId, String code);
 
-    @Query("SELECT COALESCE(AVG(c.csnl_time), 0) FROM Counsel c WHERE c.department != :deptId " +
-            "AND c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
-    Double getOtherAvgCsnlTime(Department deptId, String code);
+    @Query("SELECT COALESCE(AVG(c.csnl_time), 0) FROM Counsel c WHERE " +
+            "c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
+    Double getOtherAvgCsnlTime(String code);
 
     @Query("SELECT COALESCE(AVG(c.wait_time), 0) FROM Counsel c WHERE c.department = :deptId " +
             "AND c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
     Double getAvgWaitTime(Department deptId, String code);
 
-    @Query("SELECT COALESCE(AVG(c.wait_time), 0) FROM Counsel c WHERE c.department != :deptId " +
-            "AND c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
-    Double getOtherAvgWaitTime(Department deptId, String code);
+    @Query("SELECT COALESCE(AVG(c.wait_time), 0) FROM Counsel c WHERE " +
+            "c.csnl_cd = '02' AND c.user_dvcd = :code GROUP BY c.user_dvcd")
+    Double getOtherAvgWaitTime(String code);
 
     @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.kiosk_id = :kioskId " +
             "AND c.user_dvcd = :userDvcd AND c.csnl_cd = :code AND c.crdt = :todayDate")
@@ -40,4 +40,5 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :deptNm AND HOUR(c.csnl_start_dt) = :time AND SUBSTRING(c.crdt, 5, 2) = :month")
     int getCntByTime(Department deptNm, int time, String month);
+
 }
