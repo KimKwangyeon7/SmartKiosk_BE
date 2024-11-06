@@ -8,6 +8,7 @@ import com.iMbank.iMbank.domain.kiosk.entity.Kiosk;
 import com.iMbank.iMbank.domain.kiosk.repository.KioskRepository;
 import com.iMbank.iMbank.domain.member.repository.MemberRepository;
 import com.iMbank.iMbank.domain.wicket.dto.WicketListInfo;
+import com.iMbank.iMbank.domain.wicket.dto.request.UpdatedWicketInfoList;
 import com.iMbank.iMbank.domain.wicket.dto.response.MapLayoutResponse;
 import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import com.iMbank.iMbank.domain.wicket.repository.WicketRepository;
@@ -41,11 +42,11 @@ public class WicketServiceImpl implements WicketService {
 
         for (Wicket dto : wicketList) {
             String key = dto.getRowNum() + "," + dto.getColNum();
-            String value = "창구 " + dto.getWd_num();
+            String value = "창구 " + dto.getWd_num() + "," + dto.getWd_id();
             set.add(dto.getWd_floor());
             String userNm = memberRepository.findNameById(dto.getUser_id());
             String workDvcdNm = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(dept.getDept_nm(), dto.getWd_dvcd());
-            detail.add(dto.getRowNum() + " " + dto.getColNum() + " " + dto.getWd_id() + " " +
+            detail.add(dto.getRowNum() + " " + dto.getColNum() + " " + dto.getWd_id() + " " + dto.getWd_num() + " " +
                     userNm + " " + workDvcdNm);
             if (!map.containsKey(dto.getWd_floor())){
                 Map<String, String> tmp = new HashMap<>();
@@ -72,5 +73,40 @@ public class WicketServiceImpl implements WicketService {
             floors[cnt++] = i;
         }
         return new MapLayoutResponse(wicketListInfo, kioskInfo, floors, detail);
+    }
+
+    @Override
+    public void sendUpdatedWicketListInfo(UpdatedWicketInfoList updatedWicketInfoList) {
+        // 키오스크 위치 수정
+        if (!updatedWicketInfoList.kiosks().isEmpty()){
+            for (Map<String, String> map: updatedWicketInfoList.kiosks()){
+                int x = Integer.parseInt(map.get("to").split(",")[0]);
+                int y = Integer.parseInt(map.get("to").split(",")[1]);
+
+                Kiosk kiosk = kioskRepository.findByDepartment(departmentRepository.findByDeptNM("강남").orElse(null)).orElse(null);
+                if (kiosk != null){
+                    kiosk.setColNum(y);
+                    kiosk.setRowNum(x);
+                    kioskRepository.save(kiosk);
+                }
+            }
+        }
+
+        // 창구 위치 수정
+        if (!updatedWicketInfoList.counters().isEmpty()){
+            for (Map<String, String> map: updatedWicketInfoList.counters()){
+                int x = Integer.parseInt(map.get("to").split(",")[0]);
+                int y = Integer.parseInt(map.get("to").split(",")[1]);
+                int counterNum = Integer.parseInt(map.get("counterName").split(",")[0].substring(3));
+                int counterId = Integer.parseInt(map.get("counterName").split(",")[1]);
+
+                Wicket wicket = wicketRepository.findByWd_id(counterId);
+                wicket.setRowNum(x);
+                wicket.setRowNum(y);
+                wicket.setWd_num(counterNum);
+
+                wicketRepository.save(wicket);
+            }
+        }
     }
 }
