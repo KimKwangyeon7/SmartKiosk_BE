@@ -33,6 +33,10 @@ public class Kiosk {
     @Column(columnDefinition = "int")
     private int colNum;
 
+    @Comment("주소")
+    @Column(columnDefinition = "VARCHAR(100)")
+    private String address;
+
 
     @OneToMany(mappedBy = "kiosk", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>(); // 티켓 리스트

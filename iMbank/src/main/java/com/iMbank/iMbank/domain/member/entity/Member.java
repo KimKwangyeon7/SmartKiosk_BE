@@ -38,6 +38,10 @@ public class Member {
     @Comment("프로필 이미지 URL")
     private String profileImage;
 
+    @Comment("부서 아이디")
+    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
+    private String dept_id;
+
     @Comment("권한")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
