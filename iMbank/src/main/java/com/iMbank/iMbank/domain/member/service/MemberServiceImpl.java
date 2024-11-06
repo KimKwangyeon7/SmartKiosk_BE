@@ -79,7 +79,6 @@ public class MemberServiceImpl implements MemberService {
         if (token.isEmpty()) {
             throw new MemberException(MemberErrorCode.ALREADY_MEMBER_LOGOUT);
         }
-
         // 리프레쉬 토큰 삭제
         refreshTokenRepository.delete(email);
     }
@@ -87,14 +86,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true)
     public MemberInfo getMember(int memberId) {
-        Member member = findMemberById((long)memberId);
+        Member member = findMemberById((long)memberId).orElse(null);
 
         return new MemberInfo(
                 member.getUser_id(),
                 member.getEmail(),
                 member.getName(),
-                member.getNickname(),
-                member.getProfileImage(),
+                member.getDept_nm(),
                 member.getRole()
         );
     }
@@ -165,8 +163,7 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
     }
 
-    private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER));
+    private Optional<Member> findMemberById(Long memberId) {
+        return memberRepository.findById(memberId);
     }
 }

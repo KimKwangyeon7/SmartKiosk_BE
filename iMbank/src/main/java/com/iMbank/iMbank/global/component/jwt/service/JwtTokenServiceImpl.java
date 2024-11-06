@@ -44,8 +44,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 member.getUser_id(),
                 member.getEmail(),
                 member.getName(),
-                member.getNickname(),
-                member.getProfileImage(),
+                member.getDept_nm(),
                 member.getRole()
         );
 

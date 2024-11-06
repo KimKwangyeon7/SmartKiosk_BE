@@ -8,7 +8,6 @@ public record MemberInfo(
         String email,
         String name,
         String nickname,
-        String profileImage,
         MemberRole role
 ) {
 }

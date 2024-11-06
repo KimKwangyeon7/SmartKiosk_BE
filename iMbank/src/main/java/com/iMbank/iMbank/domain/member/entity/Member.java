@@ -1,6 +1,7 @@
 package com.iMbank.iMbank.domain.member.entity;
 
 import com.iMbank.iMbank.domain.counsel.entity.Counsel;
+import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.member.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,21 +32,17 @@ public class Member {
     @Column(columnDefinition = "VARCHAR(40)")
     private String name;
 
-    @Comment("닉네임")
-    @Column(columnDefinition = "VARCHAR(60)", nullable = false)
-    private String nickname;
-
     @Comment("프로필 이미지 URL")
     private String profileImage;
-
-    @Comment("부서 아이디")
-    @Column(columnDefinition = "VARCHAR(10)", nullable = false)
-    private String dept_id;
 
     @Comment("권한")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberRole role;
+
+    @Comment("소속 코드명")
+    @Column(nullable = false)
+    private String dept_nm;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Counsel> counsels = new ArrayList<>();

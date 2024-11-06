@@ -2,6 +2,7 @@ package com.iMbank.iMbank.domain.department.entity;
 
 import com.iMbank.iMbank.domain.counsel.entity.Counsel;
 import com.iMbank.iMbank.domain.kiosk.entity.Kiosk;
+import com.iMbank.iMbank.domain.member.entity.Member;
 import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import jakarta.persistence.*;
 import lombok.*;
