@@ -2,6 +2,7 @@ package com.iMbank.iMbank.domain.department.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 
@@ -32,10 +33,19 @@ public class Work {
     @Column(columnDefinition = "VARCHAR(2)", nullable = false)
     private String work_dvcd;
 
-
     @Comment("업무 구분 코드명")
     @Column(columnDefinition = "VARCHAR(10)", nullable = false)
     private String work_dvcd_nm;
+
+    @Comment("순서")
+    @Column(columnDefinition = "int")
+    @ColumnDefault("0")
+    private int loc;
+
+    @Comment("색")
+    @ColumnDefault("0")
+    @Column(columnDefinition = "int")
+    private int color;
 
     public Work(Department dept, String dept_nm, String work_dvcd, String work_dvcd_nm) {
         this.department = dept;
