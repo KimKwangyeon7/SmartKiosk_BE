@@ -25,6 +25,7 @@ public interface WicketRepository extends JpaRepository<Wicket, Integer> {
     @Query("SELECT w FROM Wicket w WHERE w.department = :deptNm")
     List<Wicket> findByDeptNm(Department deptNm);
 
+    @Query("SELECT w FROM Wicket w WHERE w.wd_id = :counterId")
     Wicket findByWd_id(int counterId);
 
 }

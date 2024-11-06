@@ -30,7 +30,7 @@ public class WicketController {
     @PatchMapping("")
     //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> sendUpdatedWicketListInfo(@RequestBody UpdatedWicketInfoList updatedWicketInfoList) {
-        //System.out.println(updatedWicketInfoList);
+        System.out.println(updatedWicketInfoList);
         wicketService.sendUpdatedWicketListInfo(updatedWicketInfoList);
         return ResponseEntity.ok().body(Message.success());
     }
