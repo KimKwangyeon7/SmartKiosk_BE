@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +131,7 @@ public class CounselCustomImpl implements CounselCustom {
         // null일 경우 0.0으로 반환하고 아닐 경우 double로 변환
         myCount = myCount != null ? myCount : 0;
         otherCount = otherCount != null ? otherCount : 0;
-        return new PeriodCntInfo(myCount, otherCount);
+        return new PeriodCntInfo(myCount, otherCount/6);
     }
 
     @Override
@@ -147,7 +149,8 @@ public class CounselCustomImpl implements CounselCustom {
                             .and(c.crdt.substring(0, 4).eq(syear))
                             .and(c.csnl_cd.eq("02")))
                     .fetchOne();
-            my.put(syear, count != null ? count : 0);
+            count = count != null ? count : 0;
+            my.put(syear, count);
             year++;
         }
 
@@ -162,11 +165,40 @@ public class CounselCustomImpl implements CounselCustom {
                             .and(c.crdt.substring(0, 4).eq(syear))
                             .and(c.csnl_cd.eq("02")))
                     .fetchOne();
-            other.put(syear, count != null ? count : 0);
+            count = count != null ? count : 0;
+            count /= 6;
+            other.put(syear, count);
             year++;
         }
 
         return new YearCntInfo(my, other);
     }
 
+    @Override
+    public List<Long> getCntByMonth(Department dept, String year, String month, String code) {
+        QCounsel c = QCounsel.counsel;
+        LocalDate day = LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1);
+        LocalDate end = day.withDayOfMonth(day.lengthOfMonth());
+        int endDay = end.getDayOfMonth();
+        List<Long> list = new ArrayList<>();
+        for (int i = 1; i <= endDay; i++){
+            String str = "";
+            if (i < 10){
+                str = "0" + i;
+            } else {
+                str = "" + i;
+            }
+            Long count = queryFactory
+                    .select(c.counsel_id.count())
+                    .from(c)
+                    .where(c.department.eq(dept)
+                            .and(c.user_dvcd.eq(code))
+                            .and(c.crdt.eq(year+month+str))
+                            .and(c.csnl_cd.eq("02")))
+                    .fetchOne();
+            count = count != null ? count : 0;
+            list.add(count);
+        }
+        return list;
+    }
 }

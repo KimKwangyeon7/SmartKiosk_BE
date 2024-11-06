@@ -38,7 +38,7 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
             "AND c.csnl_cd = '02' AND c.user_dvcd = :code")
     Long getTotalCntByWork(Department deptId, String code);
 
-    @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :deptNm AND HOUR(c.csnl_start_dt) = :time AND SUBSTRING(c.crdt, 5, 2) = :month")
+    @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :deptNm AND HOUR(c.csnl_start_dt) = :time AND SUBSTRING(c.crdt, 1, 6) = :month")
     int getCntByTime(Department deptNm, int time, String month);
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -71,8 +72,16 @@ public class StatisticsController {
     // 시간대별 고객 평균
     @PostMapping("/time")
     @PreAuthorize("hasAuthority('HEADQUARTER')")
-    public ResponseEntity<Message<Map<Integer, Integer>>> getAvgCntByTime(@RequestParam String deptNm, @RequestParam int month) {
-        Map<Integer, Integer> map = statisticsService.getAvgCntByTime(deptNm, month);
+    public ResponseEntity<Message<Map<Integer, Integer>>> getAvgCntByTime(@RequestParam String deptNm) {
+        Map<Integer, Integer> map = statisticsService.getAvgCntByTime(deptNm);
+        return ResponseEntity.ok().body(Message.success(map));
+    }
+
+    // 해당 달의 고객 수
+    @PostMapping("/month")
+    @PreAuthorize("hasAuthority('HEADQUARTER')")
+    public ResponseEntity<Message<Map<String, List<Long>>>> getAvgCntByMonth(@RequestParam String deptNm, @RequestParam String date) {
+        Map<String, List<Long>> map = statisticsService.getAvgCntByMonth(deptNm, date.substring(0, 4), date.substring(4));
         return ResponseEntity.ok().body(Message.success(map));
     }
 
@@ -83,5 +92,4 @@ public class StatisticsController {
         Map<String, Long> map = statisticsService.getWicketPercentage(deptNm);
         return ResponseEntity.ok().body(Message.success(map));
     }
-
 }

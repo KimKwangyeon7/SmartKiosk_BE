@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,18 +175,47 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public Map<Integer, Integer> getAvgCntByTime(String deptNm, int month) {
+    public Map<String, List<Long>> getAvgCntByMonth(String deptNm, String year, String month) {
+        Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
+        List<String> list = getAllWorks(deptNm);
+        Map<String, List<Long>> map = new HashMap<>();
+        for (String code: list){
+            if (dept != null) {
+                String codeName = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(deptNm, code);
+                List<Long> tmp = counselRepository.getCntByMonth(dept, year, month, code);
+                map.put(codeName, tmp);
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map<Integer, Integer> getAvgCntByTime(String deptNm) {
         int stime = Integer.parseInt(departmentRepository.findStimeByDeptNm(deptNm).substring(0, 2));
         int etime = Integer.parseInt(departmentRepository.findEtimeByDeptNm(deptNm).substring(0, 2));
         Map<Integer, Integer> map = new HashMap<>();
         Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
-        String str = "" + month;
-        if (month < 10){
-            str = "0" + str;
+        LocalDateTime now = LocalDateTime.now();
+        int month = now.getMonthValue()-1;
+        int year = now.getYear();
+        for (int j = 0; j < 4; j++) {
+            month -= j;
+            if (month <= 0){
+                month = 12 + month;
+                year -= 1;
+            }
+            String str = "" + month;
+            if (month < 10) {
+                str = "0" + str;
+            }
+            String tmp = year + str;
+            for (int i = stime; i < etime; i++) {
+                int cnt = counselRepository.getCntByTime(dept, i, tmp);
+                map.put(i, map.getOrDefault(i, 0) + cnt);
+            }
         }
-        for (int i = stime; i < etime; i++){
-            int cnt = counselRepository.getCntByTime(dept, i, str);
-            map.put(i, cnt);
+        for (int key: map.keySet()){
+            map.put(key, map.get(key)/4);
         }
         return map;
     }
@@ -202,8 +232,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         return map;
     }
-
-
 
     public List<String> getAllWorks(String deptNm){
         return workRepository.findWorkDvcdByDeptNm(deptNm);
