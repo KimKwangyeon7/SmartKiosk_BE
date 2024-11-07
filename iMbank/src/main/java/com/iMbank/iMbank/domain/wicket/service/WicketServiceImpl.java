@@ -1,5 +1,6 @@
 package com.iMbank.iMbank.domain.wicket.service;
 
+import com.iMbank.iMbank.domain.counsel.repository.CounselRepository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.department.repository.DepartmentRepository;
 import com.iMbank.iMbank.domain.department.repository.WorkRepository;
@@ -8,6 +9,7 @@ import com.iMbank.iMbank.domain.kiosk.entity.Kiosk;
 import com.iMbank.iMbank.domain.kiosk.repository.KioskRepository;
 import com.iMbank.iMbank.domain.member.repository.MemberRepository;
 import com.iMbank.iMbank.domain.wicket.dto.WicketListInfo;
+import com.iMbank.iMbank.domain.wicket.dto.request.CreateWicketRequest;
 import com.iMbank.iMbank.domain.wicket.dto.request.UpdatedWicketInfoList;
 import com.iMbank.iMbank.domain.wicket.dto.response.MapLayoutResponse;
 import com.iMbank.iMbank.domain.wicket.entity.Wicket;
@@ -30,6 +32,7 @@ public class WicketServiceImpl implements WicketService {
     private final KioskRepository kioskRepository;
     private final MemberRepository memberRepository;
     private final WorkRepository workRepository;
+    private final CounselRepository counselRepository;
 
     @Override
     public MapLayoutResponse getWicketListInfo(String deptNm) {
@@ -110,4 +113,25 @@ public class WicketServiceImpl implements WicketService {
             }
         }
     }
+
+    @Override
+    public int createWicket(CreateWicketRequest createWicketRequest) {
+        Department deptId = departmentRepository.findByDeptNM(createWicketRequest.deptNm()).orElse(null);
+        String wdDvcd = workRepository.findWorkDvcdByWorkDvcdNm(createWicketRequest.wdDvcdNm(), deptId);
+        int wdNum = createWicketRequest.wdNum();
+        int wdFloor = createWicketRequest.wdFloor();
+        int colNum = 0;
+        int rowNum = 0;
+        int userId = 1;
+        Wicket wicket = new Wicket(deptId, wdDvcd, wdNum, wdFloor, rowNum, colNum, userId);
+        wicketRepository.save(wicket);
+        return wicket.getWd_id();
+    }
+
+//    @Override
+//    public void deleteWicket(int wdId) {
+//        Department dept = departmentRepository.findByDeptNM("강남").orElse(null);
+//        counselRepository.deleteByWdId(wdId, dept);
+//        wicketRepository.deleteByWdId(wdId, dept);
+//    }
 }

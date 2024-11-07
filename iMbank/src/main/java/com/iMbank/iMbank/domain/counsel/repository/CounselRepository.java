@@ -2,6 +2,7 @@ package com.iMbank.iMbank.domain.counsel.repository;
 
 import com.iMbank.iMbank.domain.counsel.entity.Counsel;
 import com.iMbank.iMbank.domain.department.entity.Department;
+import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -40,5 +41,4 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :deptNm AND HOUR(c.csnl_start_dt) = :time AND SUBSTRING(c.crdt, 1, 6) = :month")
     int getCntByTime(Department deptNm, int time, String month);
-
 }

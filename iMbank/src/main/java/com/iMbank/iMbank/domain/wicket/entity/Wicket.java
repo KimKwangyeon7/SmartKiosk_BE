@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wicket {
     @Id
@@ -48,10 +48,20 @@ public class Wicket {
     private int colNum;
 
     @Comment("담당 직원 아이디")
-    @Column(columnDefinition = "int", nullable = false)
+    @Column(columnDefinition = "int")
     private int user_id;
 
 
     @OneToMany(mappedBy = "wicket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Counsel> counsels = new ArrayList<>();
+
+    public Wicket(Department deptId, String wdDvcd, int wdNum, int wdFloor, int rowNum, int colNum, int userId) {
+        this.department = deptId;
+        this.wd_dvcd = wdDvcd;
+        this.wd_num = wdNum;
+        this.wd_floor = wdFloor;
+        this.rowNum = rowNum;
+        this.colNum = colNum;
+        this.user_id = userId;
+    }
 }
