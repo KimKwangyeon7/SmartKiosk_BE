@@ -43,12 +43,12 @@ public class WicketController {
         return ResponseEntity.ok().body(Message.success(wicketService.createWicket(createWicketRequest)));
     }
 
-//    @DeleteMapping("/{wdId}")
-//    //@PreAuthorize("hasAuthority('BRANCH')")
-//    public ResponseEntity<Message<Void>> deleteWicket(@PathVariable int wdId) {
-//        wicketService.deleteWicket(wdId);
-//        return ResponseEntity.ok().body(Message.success(null));
-//    }
+    @DeleteMapping("/{wdId}")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> deleteWicket(@PathVariable int wdId) {
+        wicketService.deleteWicket(wdId);
+        return ResponseEntity.ok().body(Message.success(null));
+    }
 
 
 }

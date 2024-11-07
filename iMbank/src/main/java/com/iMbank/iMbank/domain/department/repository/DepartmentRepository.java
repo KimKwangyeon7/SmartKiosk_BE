@@ -14,7 +14,7 @@ public interface DepartmentRepository extends JpaRepository<Department, String> 
     String findDeptIdByDeptNm(String deptNm);
 
     @Query("SELECT d from Department d WHERE d.dept_id = :id")
-    Optional<Department> findByDeptId(String id);
+    Department findByDeptId(String id);
 
     @Query("SELECT d from Department d WHERE d.dept_nm = :deptNm")
     Optional<Department> findByDeptNM(String deptNm);
