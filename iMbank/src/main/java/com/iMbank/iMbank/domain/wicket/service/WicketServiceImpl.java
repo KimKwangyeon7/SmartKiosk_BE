@@ -45,7 +45,8 @@ public class WicketServiceImpl implements WicketService {
 
         for (Wicket dto : wicketList) {
             String key = dto.getRowNum() + "," + dto.getColNum();
-            String value = "창구 " + dto.getWd_num() + "," + dto.getWd_id();
+            String nm = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd("강남", dto.getWd_dvcd());
+            String value = "창구 " + dto.getWd_num() + "," + dto.getWd_id() + "," + nm;
             set.add(dto.getWd_floor());
             String userNm = memberRepository.findNameById(dto.getUser_id());
             String workDvcdNm = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(dept.getDept_nm(), dto.getWd_dvcd());
@@ -134,5 +135,21 @@ public class WicketServiceImpl implements WicketService {
         System.out.println(wdId);
         counselRepository.deleteByWdId(wdId, "B001");
         wicketRepository.deleteByWdId(wdId);
+    }
+
+    @Override
+    public void updateWicket(String code) {
+        int rowNum = Integer.parseInt(code.split(" ")[0].split(",")[0]);
+        int colNum = Integer.parseInt(code.split(" ")[0].split(",")[1]);
+        int wdNum = Integer.parseInt(code.split(" ")[2].split(",")[0]);
+        int wdId = Integer.parseInt(code.split(" ")[2].split(",")[1]);;
+        String wdDvcdNm = code.split(" ")[2].split(",")[2];
+        int floor = Integer.parseInt(code.split(" ")[2].split(",")[3]);
+        Wicket wicket = wicketRepository.findByWd_id(wdId);
+        wicket.setRowNum(rowNum);
+        wicket.setColNum(colNum);
+        wicket.setWd_dvcd(workRepository.findWorkDvcdByWorkDvcdNm(wdDvcdNm, departmentRepository.findByDeptNM("B001").orElse(null)));
+        wicket.setWd_num(wdNum);
+        wicketRepository.save(wicket);
     }
 }
