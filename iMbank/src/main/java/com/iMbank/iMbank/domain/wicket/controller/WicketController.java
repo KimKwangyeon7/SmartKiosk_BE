@@ -1,5 +1,6 @@
 package com.iMbank.iMbank.domain.wicket.controller;
 
+import com.iMbank.iMbank.domain.wicket.dto.request.CreateWicketRequest;
 import com.iMbank.iMbank.domain.wicket.dto.request.UpdatedWicketInfoList;
 import com.iMbank.iMbank.domain.wicket.dto.response.MapLayoutResponse;
 import com.iMbank.iMbank.domain.wicket.service.WicketService;
@@ -26,7 +27,7 @@ public class WicketController {
     }
 
 
-    // 업무별 고객 1명당 걸리는 평균 상담 시간
+
     @PatchMapping("")
     //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> sendUpdatedWicketListInfo(@RequestBody UpdatedWicketInfoList updatedWicketInfoList) {
@@ -34,6 +35,20 @@ public class WicketController {
         wicketService.sendUpdatedWicketListInfo(updatedWicketInfoList);
         return ResponseEntity.ok().body(Message.success());
     }
+
+    @PostMapping("")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Integer>> createWicket(@RequestBody CreateWicketRequest createWicketRequest) {
+        System.out.println(createWicketRequest);
+        return ResponseEntity.ok().body(Message.success(wicketService.createWicket(createWicketRequest)));
+    }
+
+//    @DeleteMapping("/{wdId}")
+//    //@PreAuthorize("hasAuthority('BRANCH')")
+//    public ResponseEntity<Message<Void>> deleteWicket(@PathVariable int wdId) {
+//        wicketService.deleteWicket(wdId);
+//        return ResponseEntity.ok().body(Message.success(null));
+//    }
 
 
 }

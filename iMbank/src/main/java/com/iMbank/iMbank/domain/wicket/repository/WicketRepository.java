@@ -3,6 +3,7 @@ package com.iMbank.iMbank.domain.wicket.repository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,6 @@ public interface WicketRepository extends JpaRepository<Wicket, Integer> {
     @Query("SELECT w FROM Wicket w WHERE w.wd_id = :counterId")
     Wicket findByWd_id(int counterId);
 
+    @Query("DELETE FROM Wicket w WHERE w.wd_id = :wdId AND w.department = :dept")
+    void deleteByWdId(int wdId, Department dept);
 }
