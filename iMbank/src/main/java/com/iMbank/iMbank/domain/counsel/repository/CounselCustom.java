@@ -4,8 +4,7 @@ package com.iMbank.iMbank.domain.counsel.repository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.statistics.dto.PeriodCntInfo;
 import com.iMbank.iMbank.domain.statistics.dto.YearCntInfo;
-
-import java.time.Year;
+import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import java.util.List;
 
 public interface CounselCustom {
@@ -14,4 +13,5 @@ public interface CounselCustom {
     PeriodCntInfo getPeriodCnt(Department deptId, String code, String year, int period);
     YearCntInfo getCntByDeptAndYear(Department dept, String code, int year);
     List<Long> getCntByMonth(Department deptNm, String year, String month, String code);
+    void deleteByWdId(int wdID, String dept);
 }

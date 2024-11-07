@@ -4,6 +4,7 @@ import com.iMbank.iMbank.domain.counsel.entity.QCounsel;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.statistics.dto.PeriodCntInfo;
 import com.iMbank.iMbank.domain.statistics.dto.YearCntInfo;
+import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -200,5 +201,13 @@ public class CounselCustomImpl implements CounselCustom {
             list.add(count);
         }
         return list;
+    }
+//
+    @Override
+    public void deleteByWdId(int wicket, String dept) {
+        QCounsel c = QCounsel.counsel;
+
+       queryFactory.delete(c)
+               .where(c.department.dept_id.eq(dept).and(c.wd_id.eq(wicket))).execute();
     }
 }

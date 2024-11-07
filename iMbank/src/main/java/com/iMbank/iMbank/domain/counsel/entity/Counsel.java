@@ -80,11 +80,10 @@ public class Counsel {
     private Member member;
 
     @Comment("창구 아이디")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wd_id")
-    private Wicket wicket;
+    @Column(columnDefinition = "int")
+    private int wd_id;
 
-    public Counsel(Department deptId, String userDvcd, int count, String todayDate, int kioskId, String csnlCd, Member member, Wicket wicket, int waitTime, int csnlTime, Timestamp csnlStart, Timestamp csnlEnd) {
+    public Counsel(Department deptId, String userDvcd, int count, String todayDate, int kioskId, String csnlCd, Member member, int wicket, int waitTime, int csnlTime, Timestamp csnlStart, Timestamp csnlEnd) {
         this.department = deptId;
         this.user_dvcd = userDvcd;
         this.ticket_count = count;
@@ -92,7 +91,7 @@ public class Counsel {
         this.kiosk_id = kioskId;
         this.csnl_cd = csnlCd;
         this.member = member;
-        this.wicket = wicket;
+        this.wd_id = wicket;
         this.wait_time = waitTime;
         this.csnl_time = csnlTime;
     }

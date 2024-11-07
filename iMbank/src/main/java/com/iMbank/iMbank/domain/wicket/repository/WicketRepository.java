@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WicketRepository extends JpaRepository<Wicket, Integer> {
+public interface WicketRepository extends JpaRepository<Wicket, Integer>, WicketCustom {
     @Query("SELECT w.wd_dvcd FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum")
     String findWdDvcdByDeptIdAndWdNum(Department deptId, int wdNum);
 

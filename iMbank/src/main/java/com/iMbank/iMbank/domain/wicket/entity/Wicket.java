@@ -52,9 +52,6 @@ public class Wicket {
     private int user_id;
 
 
-    @OneToMany(mappedBy = "wicket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Counsel> counsels = new ArrayList<>();
-
     public Wicket(Department deptId, String wdDvcd, int wdNum, int wdFloor, int rowNum, int colNum, int userId) {
         this.department = deptId;
         this.wd_dvcd = wdDvcd;

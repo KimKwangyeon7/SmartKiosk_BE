@@ -51,7 +51,7 @@ public class WicketServiceImpl implements WicketService {
             String workDvcdNm = workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(dept.getDept_nm(), dto.getWd_dvcd());
             detail.add(dto.getRowNum() + " " + dto.getColNum() + " " + dto.getWd_id() + " " + dto.getWd_num() + " " +
                     userNm + " " + workDvcdNm);
-            if (!map.containsKey(dto.getWd_floor())){
+            if (!map.containsKey(dto.getWd_floor())) {
                 Map<String, String> tmp = new HashMap<>();
                 tmp.put(key, value);
                 map.put(dto.getWd_floor(), tmp);
@@ -72,7 +72,7 @@ public class WicketServiceImpl implements WicketService {
 
         int[] floors = new int[set.size()];
         int cnt = 0;
-        for (int i: set){
+        for (int i : set) {
             floors[cnt++] = i;
         }
         return new MapLayoutResponse(wicketListInfo, kioskInfo, floors, detail);
@@ -81,13 +81,13 @@ public class WicketServiceImpl implements WicketService {
     @Override
     public void sendUpdatedWicketListInfo(UpdatedWicketInfoList updatedWicketInfoList) {
         // 키오스크 위치 수정
-        if (!updatedWicketInfoList.kiosks().isEmpty()){
-            for (Map<String, String> map: updatedWicketInfoList.kiosks()){
+        if (!updatedWicketInfoList.kiosks().isEmpty()) {
+            for (Map<String, String> map : updatedWicketInfoList.kiosks()) {
                 int x = Integer.parseInt(map.get("to").split(",")[0]);
                 int y = Integer.parseInt(map.get("to").split(",")[1]);
 
                 Kiosk kiosk = kioskRepository.findByDepartment(departmentRepository.findByDeptNM("강남").orElse(null)).orElse(null);
-                if (kiosk != null){
+                if (kiosk != null) {
                     kiosk.setColNum(y);
                     kiosk.setRowNum(x);
                     kioskRepository.save(kiosk);
@@ -96,8 +96,8 @@ public class WicketServiceImpl implements WicketService {
         }
 
         // 창구 위치 수정
-        if (!updatedWicketInfoList.counters().isEmpty()){
-            for (Map<String, String> map: updatedWicketInfoList.counters()){
+        if (!updatedWicketInfoList.counters().isEmpty()) {
+            for (Map<String, String> map : updatedWicketInfoList.counters()) {
                 int x = Integer.parseInt(map.get("to").split(",")[0]);
                 int y = Integer.parseInt(map.get("to").split(",")[1]);
                 int counterNum = Integer.parseInt(map.get("counterName").split(",")[0].substring(3));
@@ -128,10 +128,11 @@ public class WicketServiceImpl implements WicketService {
         return wicket.getWd_id();
     }
 
-//    @Override
-//    public void deleteWicket(int wdId) {
-//        Department dept = departmentRepository.findByDeptNM("강남").orElse(null);
-//        counselRepository.deleteByWdId(wdId, dept);
-//        wicketRepository.deleteByWdId(wdId, dept);
-//    }
+    @Override
+    public void deleteWicket(int wdId) {
+        Department dept = departmentRepository.findByDeptId("B001");
+        System.out.println(wdId);
+        counselRepository.deleteByWdId(wdId, "B001");
+        wicketRepository.deleteByWdId(wdId);
+    }
 }

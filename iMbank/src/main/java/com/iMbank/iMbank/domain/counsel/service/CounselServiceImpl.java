@@ -83,7 +83,7 @@ public class CounselServiceImpl implements CounselService{
 
         // 상담 데이터 넣기
         Counsel counsel = new Counsel(dpt, user_dvcd, cnt, todayDate, kiosk.getKiosk_id(),
-                                        "00", null, null, 0, 0, null, null);
+                                        "00", null, 0, 0, 0, null, null);
         counselRepository.save(counsel);
 
         // 대기 인원 구하기 => 업무, 상담코드, 날짜, 키오스크아이디
@@ -101,7 +101,7 @@ public class CounselServiceImpl implements CounselService{
     public StartCounselResponse startCounsel(StartCounselRequest startCounselRequest) {
         String todayDate = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         // 우선 본인 창구의 dvcd = user_dvcd와 같으면서, csnl_cd는 00(대기중)인 애들을 발급 시간 순으로 오름차순
-        Department dept = departmentRepository.findByDeptId(startCounselRequest.dept_id()).orElse(null);
+        Department dept = departmentRepository.findByDeptId(startCounselRequest.dept_id());
         String wd_dvcd = wicketRepository.findWdDvcdByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
         List<Counsel> counsels = counselRepository.findFirstByDepartmentAndUserDvcdAndCsnlCdOrderByTicketStime(dept, wd_dvcd, "00", todayDate).orElse(null);
         if (counsels == null || counsels.size() == 0){
@@ -118,7 +118,7 @@ public class CounselServiceImpl implements CounselService{
         Member member = memberRepository.findById((long)user_id).orElse(null);
         counsel.setMember(member);
         Wicket wicket = wicketRepository.findByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
-        counsel.setWicket(wicket);
+        counsel.setWd_id(wicket.getWd_id());
 
         counselRepository.save(counsel);
 
@@ -139,7 +139,7 @@ public class CounselServiceImpl implements CounselService{
         counsel.setCsnl_time(minDiff);
 
         counselRepository.save(counsel);
-        return new EndCounselResponse(counsel.getDepartment().getDept_id(), counsel.getWicket().getWd_num());
+        return new EndCounselResponse(counsel.getDepartment().getDept_id(), wicketRepository.findByWd_id(counsel.getWd_id()).getWd_num());
     }
 
 
