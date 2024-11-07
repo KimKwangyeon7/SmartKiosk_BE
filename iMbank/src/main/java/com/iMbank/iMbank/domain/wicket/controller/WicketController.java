@@ -46,8 +46,17 @@ public class WicketController {
     @DeleteMapping("/{wdId}")
     //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteWicket(@PathVariable int wdId) {
+        System.out.println(wdId);
         wicketService.deleteWicket(wdId);
         return ResponseEntity.ok().body(Message.success(null));
+    }
+
+    @PatchMapping("/info")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> updateWicket(@RequestParam String code) {
+        System.out.println(code);
+        wicketService.updateWicket(code);
+        return ResponseEntity.ok().body(Message.success());
     }
 
 

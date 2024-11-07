@@ -208,6 +208,6 @@ public class CounselCustomImpl implements CounselCustom {
         QCounsel c = QCounsel.counsel;
 
        queryFactory.delete(c)
-               .where(c.department.dept_id.eq(dept).and(c.wd_id.eq(wicket))).execute();
+               .where(c.wd_id.eq(wicket)).execute();
     }
 }

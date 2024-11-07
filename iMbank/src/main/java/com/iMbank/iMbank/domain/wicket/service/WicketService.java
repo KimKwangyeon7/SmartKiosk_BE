@@ -14,4 +14,6 @@ public interface WicketService {
     int createWicket(CreateWicketRequest createWicketRequest);
 
     void deleteWicket(int wdId);
+
+    void updateWicket(String code);
 }
