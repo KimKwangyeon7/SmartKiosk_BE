@@ -8,10 +8,7 @@ import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.department.entity.Work;
 import com.iMbank.iMbank.domain.department.repository.DepartmentRepository;
 import com.iMbank.iMbank.domain.department.repository.WorkRepository;
-import com.iMbank.iMbank.domain.member.dto.MemberInfo;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginRequest;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginResponse;
-import com.iMbank.iMbank.domain.member.dto.MemberSignupRequest;
+import com.iMbank.iMbank.domain.member.dto.*;
 import com.iMbank.iMbank.domain.member.entity.Member;
 import com.iMbank.iMbank.domain.member.exception.MemberErrorCode;
 import com.iMbank.iMbank.domain.member.exception.MemberException;
@@ -156,6 +153,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Work> getButtonList(String deptNm){
         return workRepository.findAllByDeptNm(deptNm);
+    }
+
+    @Override
+    public void modifyButtonLocation(String deptNm, List<Map<String, String>> buttonLocInfoList) {
+        for (Map<String, String> buttonLocInfo: buttonLocInfoList){
+            Work work = workRepository.findWorkByWorkDvcdNm(deptNm, buttonLocInfo.get("work_dvcd_nm"));
+            work.setRight_low(buttonLocInfo.get("right_low"));
+            work.setLeft_high(buttonLocInfo.get("left_high"));
+            workRepository.save(work);
+        }
     }
 
     private Member findMemberByEmail(String email) {

@@ -4,12 +4,10 @@ import com.iMbank.iMbank.domain.counsel.dto.response.ButtonInfoResponse;
 import com.iMbank.iMbank.domain.department.dto.request.CreateButtonRequest;
 import com.iMbank.iMbank.domain.department.dto.request.ModifyButtonRequest;
 import com.iMbank.iMbank.domain.department.entity.Work;
-import com.iMbank.iMbank.domain.member.dto.MemberInfo;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginRequest;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginResponse;
-import com.iMbank.iMbank.domain.member.dto.MemberSignupRequest;
+import com.iMbank.iMbank.domain.member.dto.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -32,4 +30,6 @@ public interface MemberService {
     List<ButtonInfoResponse> getButtonInfo(String deptNm);
 
     List<Work> getButtonList(String deptNm);
+
+    void modifyButtonLocation(String deptNm, List<Map<String, String>> buttonLocInfo);
 }

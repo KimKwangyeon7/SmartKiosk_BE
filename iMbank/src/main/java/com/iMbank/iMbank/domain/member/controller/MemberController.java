@@ -3,10 +3,7 @@ package com.iMbank.iMbank.domain.member.controller;
 import com.iMbank.iMbank.domain.counsel.dto.response.ButtonInfoResponse;
 import com.iMbank.iMbank.domain.department.dto.request.CreateButtonRequest;
 import com.iMbank.iMbank.domain.department.dto.request.ModifyButtonRequest;
-import com.iMbank.iMbank.domain.member.dto.MemberInfo;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginRequest;
-import com.iMbank.iMbank.domain.member.dto.MemberLoginResponse;
-import com.iMbank.iMbank.domain.member.dto.MemberSignupRequest;
+import com.iMbank.iMbank.domain.member.dto.*;
 import com.iMbank.iMbank.domain.member.service.MemberService;
 import com.iMbank.iMbank.global.common.dto.Message;
 import com.iMbank.iMbank.global.component.jwt.security.MemberLoginActive;
@@ -21,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -118,5 +116,16 @@ public class MemberController {
         List<ButtonInfoResponse> buttonInfoResponses = memberService.getButtonInfo(deptNm);
         System.out.println("2222222222222222222222" + buttonInfoResponses.size());
         return ResponseEntity.ok().body(Message.success(buttonInfoResponses));
+    }
+
+    // 버튼 수정
+    @PatchMapping("/button/loc")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> modifyButtonLocation(@RequestParam String deptNm, @RequestBody List<Map<String, String>> buttonLocInfoList) {
+//        for (ButtonLocInfo buttonLocInfo: buttonLocInfoList) {
+//            System.out.println(buttonLocInfo.toString());
+//        }
+        memberService.modifyButtonLocation(deptNm, buttonLocInfoList);
+        return ResponseEntity.ok().body(Message.success());
     }
 }
