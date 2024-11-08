@@ -114,7 +114,9 @@ public class MemberController {
     // 버튼 리스트 가져오기
     @GetMapping("/button/{deptNm}")
     public ResponseEntity<Message<List<ButtonInfoResponse>>> getButtonInfo(@PathVariable String deptNm) {
+        System.out.println("1111111111111111111111" + deptNm);
         List<ButtonInfoResponse> buttonInfoResponses = memberService.getButtonInfo(deptNm);
+        System.out.println("2222222222222222222222" + buttonInfoResponses.size());
         return ResponseEntity.ok().body(Message.success(buttonInfoResponses));
     }
 }
