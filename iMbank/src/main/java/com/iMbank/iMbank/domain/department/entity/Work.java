@@ -47,6 +47,14 @@ public class Work {
     @Column(columnDefinition = "int")
     private int color;
 
+    @Comment("왼쪽 위 좌표")
+    @Column(columnDefinition = "varchar(20)")
+    private String left_high;
+
+    @Comment("오른쪽 아래 좌표")
+    @Column(columnDefinition = "varchar(20)")
+    private String right_low;
+
     public Work(Department dept, String dept_nm, String work_dvcd, String work_dvcd_nm) {
         this.department = dept;
         this.dept_nm = dept_nm;

@@ -7,7 +7,8 @@ public record ButtonInfoResponse(
         String work_dvcd_nm,
         int wait_time,
         int wait_people,
-        int loc,
+        String left_high,
+        String right_low,
         int color
 ) {
 }

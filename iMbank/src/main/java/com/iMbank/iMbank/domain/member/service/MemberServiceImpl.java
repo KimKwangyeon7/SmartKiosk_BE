@@ -147,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
             Map<String, Double> map = statisticsService.getAvgCsnlTime(departmentRepository.findDeptNameByDeptId(works.get(i).getDepartment().getDept_id())).myAvg();
             int wait_time = (int) (map.get(works.get(i).getWork_dvcd_nm()) * wait_people);
             Work w = works.get(i);
-            res.add(new ButtonInfoResponse(w.getDepartment().getDept_id(), w.getDept_nm(), w.getWork_dvcd(), w.getWork_dvcd_nm(), wait_time, wait_people, w.getLoc(), w.getColor()));
+            res.add(new ButtonInfoResponse(w.getDepartment().getDept_id(), w.getDept_nm(), w.getWork_dvcd(), w.getWork_dvcd_nm(), wait_time, wait_people, w.getLeft_high(), w.getRight_low(), w.getColor()));
         }
 
         return res;
