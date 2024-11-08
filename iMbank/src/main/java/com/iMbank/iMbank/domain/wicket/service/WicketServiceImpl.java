@@ -10,7 +10,9 @@ import com.iMbank.iMbank.domain.kiosk.repository.KioskRepository;
 import com.iMbank.iMbank.domain.member.repository.MemberRepository;
 import com.iMbank.iMbank.domain.wicket.dto.WicketListInfo;
 import com.iMbank.iMbank.domain.wicket.dto.request.CreateWicketRequest;
+import com.iMbank.iMbank.domain.wicket.dto.request.KioskMoveRequest;
 import com.iMbank.iMbank.domain.wicket.dto.request.UpdatedWicketInfoList;
+import com.iMbank.iMbank.domain.wicket.dto.request.WicketMoveRequest;
 import com.iMbank.iMbank.domain.wicket.dto.response.MapLayoutResponse;
 import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import com.iMbank.iMbank.domain.wicket.repository.WicketRepository;
@@ -148,8 +150,36 @@ public class WicketServiceImpl implements WicketService {
         Wicket wicket = wicketRepository.findByWd_id(wdId);
         wicket.setRowNum(rowNum);
         wicket.setColNum(colNum);
-        wicket.setWd_dvcd(workRepository.findWorkDvcdByWorkDvcdNm(wdDvcdNm, departmentRepository.findByDeptNM("B001").orElse(null)));
+        wicket.setWd_dvcd(workRepository.findWorkDvcdByWorkDvcdNm(wdDvcdNm, departmentRepository.findByDeptNM("강남").orElse(null)));
         wicket.setWd_num(wdNum);
         wicketRepository.save(wicket);
+    }
+
+    @Override
+    public void moveWicket(WicketMoveRequest wicketMoveRequest) {
+        int wdId = Integer.parseInt(wicketMoveRequest.counterName().split(" ")[1].split(",")[1]);
+        Wicket wicket = wicketRepository.findByWd_id(wdId);
+        wicket.setRowNum(Integer.parseInt(wicketMoveRequest.to().split(",")[0]));
+        wicket.setColNum(Integer.parseInt(wicketMoveRequest.to().split(",")[1]));
+
+        wicketRepository.save(wicket);
+    }
+
+    @Override
+    public void moveKiosk(KioskMoveRequest kioskMoveRequest) {
+        Kiosk kiosk = kioskRepository.findByKioskId(1).orElse(null);
+        kiosk.setRowNum(Integer.parseInt(kioskMoveRequest.to().split(",")[0]));
+        kiosk.setColNum(Integer.parseInt(kioskMoveRequest.to().split(",")[1]));
+
+        kioskRepository.save(kiosk);
+    }
+
+    @Override
+    public void deleteFloor(int floor) {
+        Department dept = departmentRepository.findByDeptId("B001");
+        System.out.println(dept);
+        wicketRepository.deleteByFloor(floor, dept);
+
+        wicketRepository.updateFloor(floor, dept);
     }
 }

@@ -1,7 +1,9 @@
 package com.iMbank.iMbank.domain.wicket.controller;
 
 import com.iMbank.iMbank.domain.wicket.dto.request.CreateWicketRequest;
+import com.iMbank.iMbank.domain.wicket.dto.request.KioskMoveRequest;
 import com.iMbank.iMbank.domain.wicket.dto.request.UpdatedWicketInfoList;
+import com.iMbank.iMbank.domain.wicket.dto.request.WicketMoveRequest;
 import com.iMbank.iMbank.domain.wicket.dto.response.MapLayoutResponse;
 import com.iMbank.iMbank.domain.wicket.service.WicketService;
 import com.iMbank.iMbank.global.common.dto.Message;
@@ -56,6 +58,27 @@ public class WicketController {
     public ResponseEntity<Message<Void>> updateWicket(@RequestParam String code) {
         System.out.println(code);
         wicketService.updateWicket(code);
+        return ResponseEntity.ok().body(Message.success());
+    }
+
+    @PatchMapping("/move")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> moveWicket(@RequestBody WicketMoveRequest wicketMoveRequest) {
+        wicketService.moveWicket(wicketMoveRequest);
+        return ResponseEntity.ok().body(Message.success());
+    }
+
+    @PatchMapping("/kiosk/move")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> moveKiosk(@RequestBody KioskMoveRequest kioskMoveRequest) {
+        wicketService.moveKiosk(kioskMoveRequest);
+        return ResponseEntity.ok().body(Message.success());
+    }
+
+    @DeleteMapping("/floor/{floor}")
+    //@PreAuthorize("hasAuthority('BRANCH')")
+    public ResponseEntity<Message<Void>> moveWicket(@PathVariable int floor) {
+        wicketService.deleteFloor(floor);
         return ResponseEntity.ok().body(Message.success());
     }
 

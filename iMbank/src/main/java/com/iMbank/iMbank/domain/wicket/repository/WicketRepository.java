@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,4 +32,14 @@ public interface WicketRepository extends JpaRepository<Wicket, Integer>, Wicket
 
     @Query("DELETE FROM Wicket w WHERE w.wd_id = :wdId AND w.department = :dept")
     void deleteByWdId(int wdId, Department dept);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Wicket w where w.wd_floor = :floor AND w.department = :dept")
+    void deleteByFloor(int floor, Department dept);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Wicket w SET w.wd_floor = w.wd_floor-1 WHERE w.wd_floor > :floor AND w.department = :dept")
+    void updateFloor(int floor, Department dept);
 }
