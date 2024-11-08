@@ -12,3 +12,4 @@ public record ButtonInfoResponse(
         int color
 ) {
 }
+
