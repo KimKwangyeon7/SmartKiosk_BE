@@ -4,7 +4,6 @@ package com.iMbank.iMbank.domain.counsel.repository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.statistics.dto.PeriodCntInfo;
 import com.iMbank.iMbank.domain.statistics.dto.YearCntInfo;
-import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import java.util.List;
 
 public interface CounselCustom {

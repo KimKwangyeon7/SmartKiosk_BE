@@ -1,6 +1,5 @@
 package com.iMbank.iMbank.domain.wicket.repository;
 
-import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.wicket.entity.QWicket;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

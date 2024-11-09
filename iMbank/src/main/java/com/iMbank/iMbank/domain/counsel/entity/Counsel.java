@@ -3,13 +3,11 @@ package com.iMbank.iMbank.domain.counsel.entity;
 
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.member.entity.Member;
-import com.iMbank.iMbank.domain.wicket.entity.Wicket;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 

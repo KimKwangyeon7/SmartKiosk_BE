@@ -1,7 +1,6 @@
 package com.iMbank.iMbank.domain.member.entity;
 
 import com.iMbank.iMbank.domain.counsel.entity.Counsel;
-import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.member.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;

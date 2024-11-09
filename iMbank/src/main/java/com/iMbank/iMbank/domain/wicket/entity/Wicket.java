@@ -1,13 +1,9 @@
 package com.iMbank.iMbank.domain.wicket.entity;
 
-import com.iMbank.iMbank.domain.counsel.entity.Counsel;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

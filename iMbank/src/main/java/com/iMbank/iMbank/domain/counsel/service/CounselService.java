@@ -1,6 +1,5 @@
 package com.iMbank.iMbank.domain.counsel.service;
 
-
 import com.iMbank.iMbank.domain.counsel.dto.IssuedTicketInfo;
 import com.iMbank.iMbank.domain.counsel.dto.request.StartCounselRequest;
 import com.iMbank.iMbank.domain.counsel.dto.response.EndCounselResponse;
