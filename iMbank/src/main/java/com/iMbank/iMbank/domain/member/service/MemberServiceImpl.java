@@ -113,9 +113,9 @@ public class MemberServiceImpl implements MemberService {
         Department dept = departmentRepository.findByDeptNM(createButtonRequest.dept_nm()).orElse(null);
 
         if (max > 9){
-            work = new Work(dept, createButtonRequest.dept_nm(), ""+max, createButtonRequest.work_dvcd_nm());
+            work = new Work(dept, createButtonRequest.dept_nm(), ""+max, createButtonRequest.work_dvcd_nm(), createButtonRequest.color(), createButtonRequest.left_high(), createButtonRequest.right_low());
         } else {
-            work = new Work(dept, createButtonRequest.dept_nm(), "0"+max, createButtonRequest.work_dvcd_nm());
+            work = new Work(dept, createButtonRequest.dept_nm(), "0"+max, createButtonRequest.work_dvcd_nm(), createButtonRequest.color(), createButtonRequest.left_high(), createButtonRequest.right_low());
         }
         workRepository.save(work);
     }
@@ -124,6 +124,7 @@ public class MemberServiceImpl implements MemberService {
     public void modifyButton(ModifyButtonRequest modifyButtonRequest) {
         Work work = workRepository.findWorkByWorkDvcdNm(modifyButtonRequest.dept_nm(), modifyButtonRequest.old_work_dvcd_nm());
         work.setWork_dvcd_nm(modifyButtonRequest.new_work_dvcd_nm());
+        work.setColor(modifyButtonRequest.color());
         workRepository.save(work);
     }
 
