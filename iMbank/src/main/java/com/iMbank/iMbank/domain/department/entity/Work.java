@@ -55,10 +55,13 @@ public class Work {
     @Column(columnDefinition = "varchar(20)")
     private String right_low;
 
-    public Work(Department dept, String dept_nm, String work_dvcd, String work_dvcd_nm) {
+    public Work(Department dept, String dept_nm, String work_dvcd, String work_dvcd_nm, int color, String left_high, String right_low) {
         this.department = dept;
         this.dept_nm = dept_nm;
         this.work_dvcd = work_dvcd;
         this.work_dvcd_nm = work_dvcd_nm;
+        this.color = color;
+        this.left_high = left_high;
+        this.right_low = right_low;
     }
 }

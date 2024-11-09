@@ -103,7 +103,7 @@ public class MemberController {
     @PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteButton(@AuthenticationPrincipal MemberLoginActive loginActive,
                                                         @PathVariable String deptNm, @PathVariable String workDvcdNm) {
-        CreateButtonRequest createButtonRequest = new CreateButtonRequest(deptNm, workDvcdNm);
+        CreateButtonRequest createButtonRequest = new CreateButtonRequest(deptNm, workDvcdNm, "", "", 0);
         memberService.deleteButton(createButtonRequest);
         String reissueAccessToken = jwtTokenService.reissueAccessToken(loginActive.email());
         return ResponseEntity.ok().body(Message.success());
