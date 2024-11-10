@@ -4,7 +4,10 @@ import com.iMbank.iMbank.domain.counsel.entity.Counsel;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,4 +45,14 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query("SELECT c FROM Counsel c WHERE c.csnl_cd = '01' AND  c.crdt = :today AND c.department = :dept")
     List<Counsel> findWicketCounseling(String today, Department dept);
+
+    @Query(value = "SELECT MAX(TIMESTAMPDIFF(MINUTE, csnl_start_dt, :currentTime)) FROM Counsel " +
+            "WHERE dept_id = :deptId AND csnl_cd = '01' AND user_dvcd = :serviceCode", nativeQuery = true)
+    Integer findMaxWaitTime(@Param("currentTime") LocalDateTime currentTime, @Param("dept") String deptId, @Param("serviceCode") String serviceCode);
+
+    @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode")
+    int getCnslCounterCnt(Department dept, String serviceCode);
+
+    @Query("SELECT c.csnl_start_dt FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode ORDER BY c.csnl_start_dt")
+    List<LocalDateTime> findByTimeDesc(Department dept, String serviceCode);
 }

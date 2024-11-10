@@ -8,6 +8,7 @@ import com.iMbank.iMbank.domain.statistics.dto.*;
 import com.iMbank.iMbank.domain.wicket.repository.WicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final WicketRepository wicketRepository;
 
     @Override
+    @Cacheable(value = "avgCsnlTime", key = "'avgCsnlTime:' + #deptNm", unless = "#result == null")
     public AvgCsnlTimeResponse getAvgCsnlTime(String deptNm) {
         // 특정 영업점의 업무 관련 테이블 존재 -> 추후 고치기
         List<String> list = getAllWorks(deptNm);
@@ -55,6 +57,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Cacheable(value = "avgWaitTime", key = "'avgWaitTime:' + #deptNm", unless = "#result == null")
     public AvgWaitTimeResponse getAvgWaitTime(String deptNm) {
         // 특정 영업점의 업무 관련 테이블 존재 -> 추후 고치기
         List<String> list = getAllWorks(deptNm);
@@ -86,6 +89,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 
     @Override
+    @Cacheable(value = "dailyCnt", key = "'dailyCnt:' + #deptNm", unless = "#result == null")
     public DailyCsnlCntResponse getDailyCnt(String deptNm) {
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         Map<String, Double> map = new HashMap<>();
@@ -115,6 +119,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 
     @Override
+    @Cacheable(value = "yearCnt", key = "'yearCnt:' + #deptNm", unless = "#result == null")
     public YearCntResponse getYearCnt(String deptNm) {
         List<String> list = getAllWorks(deptNm);
         Map<String, Map<String, Long>> my = new HashMap<>();
@@ -133,6 +138,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     // 분기별 고객수 (업무별)
     @Override
+    @Cacheable(value = "periodCnt", key = "'periodCNt:' + #deptNm + #year", unless = "#result == null")
     public PeriodCntResponse getPeriodCnt(String deptNm, String year){
         // 특정 영업점의 업무 관련 테이블 존재 -> 추후 고치기
         List<String> list = getAllWorks(deptNm);
@@ -160,6 +166,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     // 업무 비율 O
     @Override
+    @Cacheable(value = "workPercentage", key = "'workPercentage:' + #deptNm", unless = "#result == null")
     public Map<String, Long> getWorkPercentage(String deptNm) {
         List<String> list = getAllWorks(deptNm);
         Map<String, Long> map = new HashMap<>();
@@ -177,6 +184,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     // 년, 월에 맞는 고객수(업무 유형별)
     @Override
+    @Cacheable(value = "avgCntByMonth", key = "'avgCntByMonth:' + #deptNm + #year + #month", unless = "#result == null")
     public Map<String, List<Long>> getAvgCntByMonth(String deptNm, String year, String month) {
         Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
         List<String> list = getAllWorks(deptNm);
@@ -193,6 +201,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     // 지난 4달 동안의 시간대별 고객 수
     @Override
+    @Cacheable(value = "avgCntByTime", key = "'avgCntByTime:' + #deptNm", unless = "#result == null")
     public Map<Integer, Double> getAvgCntByTime(String deptNm) {
         int stime = Integer.parseInt(departmentRepository.findStimeByDeptNm(deptNm).substring(0, 2));
         int etime = Integer.parseInt(departmentRepository.findEtimeByDeptNm(deptNm).substring(0, 2));
@@ -224,6 +233,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     // 해당 지점 창구 비율 O
     @Override
+    @Cacheable(value = "wicketPercentage", key = "'wicketPercentage:' + #deptNm", unless = "#result == null")
     public Map<String, Long> getWicketPercentage(String deptNm) {
         List<String> codes = getAllWorks(deptNm);
         Map<String, Long> map = new HashMap<>();
