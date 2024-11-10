@@ -10,6 +10,7 @@ public record MapLayoutResponse(
         WicketListInfo layouts,
         KioskInfo kiosks,
         int[] floors,
-        List<String> detail
+        List<String> detail,
+        List<String> counsels
 ) {
 }

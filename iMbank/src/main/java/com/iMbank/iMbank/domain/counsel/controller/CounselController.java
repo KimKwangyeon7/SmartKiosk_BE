@@ -27,6 +27,7 @@ public class CounselController {
 
     @PostMapping("/start")
     public ResponseEntity<Message<StartCounselResponse>> startCounsel(@RequestBody StartCounselRequest startCounselRequest) {
+        System.out.println(("상담시작"));
         StartCounselResponse startCounselResponse = counselService.startCounsel(startCounselRequest);
         if (startCounselResponse == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -40,11 +41,4 @@ public class CounselController {
         EndCounselResponse endCounselResponse = counselService.endCounsel(counselId);
         return ResponseEntity.ok().body(Message.success(endCounselResponse));
     }
-
-//    @GetMapping("/get")
-//    @PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
-//    public ResponseEntity<Message<MemberInfo>> getMember(@AuthenticationPrincipal MemberLoginActive loginActive) {
-//        MemberInfo info = memberService.getMember(loginActive.id());
-//        return ResponseEntity.ok().body(Message.success(info));
-//    }
 }
