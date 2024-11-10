@@ -29,6 +29,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,8 @@ public class CounselServiceImpl implements CounselService{
         int wait_people = counselRepository.getTotalWaitCnt(kiosk.getKiosk_id(), user_dvcd, "00", todayDate)-1;
         // 대기 시간 구하기: 업무별 평균 대기 시간 * 대기 인원
         Map<String, Double> map = statisticsService.getAvgCsnlTime(ticketInfo.dept_nm()).myAvg();
-        int wait_time = (int)(map.get(ticketInfo.user_dvcd_nm()) * wait_people);
+        int avgCsnlTime = map.get(workRepository.findWorkByWorkDvcdNm(ticketInfo.dept_nm(),ticketInfo.user_dvcd_nm()).getWork_dvcd()).intValue();
+        int wait_time = estimateWaitTime(ticketInfo.dept_nm(), ticketInfo.user_dvcd_nm(), wait_people, avgCsnlTime);
         // 해당 영업점 명 구하기
         String name = ticketInfo.dept_nm();
         // 반환값: 해당 날짜의 모든 업무의 티켓 수 + 1
@@ -109,16 +111,12 @@ public class CounselServiceImpl implements CounselService{
         }
         Counsel counsel = counsels.get(0);
         // 해당 상담의 상태 변경 - 상담코드, 상담 시작 시간, 대기 시간
-        counsel.setCsnl_cd("01");
-        counsel.setCsnl_start_dt(LocalDateTime.now());
-        Duration duration = Duration.between(counsel.getTicket_stime(), counsel.getCsnl_start_dt());
-        int minDiff = (int)duration.toMinutes();
-        counsel.setWait_time(minDiff);
         int user_id = wicketRepository.findUserIdByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
-        Member member = memberRepository.findById((long)user_id).orElse(null);
-        counsel.setMember(member);
         Wicket wicket = wicketRepository.findByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
-        counsel.setWd_id(wicket.getWd_id());
+        Member member = memberRepository.findById((long) user_id).orElse(null);
+
+// startCounsel 메서드 호출로 상담 시작 설정
+        counsel.startCounsel("01", wicket, member);
 
         counselRepository.save(counsel);
 
@@ -132,15 +130,49 @@ public class CounselServiceImpl implements CounselService{
         if (counsel == null){
             return null;
         }
-        counsel.setCsnl_cd("02");
-        counsel.setCsnl_end_dt(LocalDateTime.now());
-        Duration duration = Duration.between(counsel.getCsnl_start_dt(), counsel.getCsnl_end_dt());
-        int minDiff = (int)duration.toMinutes();
-        counsel.setCsnl_time(minDiff);
+        counsel.endCounsel();
 
         counselRepository.save(counsel);
         return new EndCounselResponse(counsel.getDepartment().getDept_id(), wicketRepository.findByWd_id(counsel.getWd_id()).getWd_num());
     }
 
+    public int estimateWaitTime(String deptNm, String serviceName, int waitingCount, int avgCsnlTime) {
+        Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
+        Work work = workRepository.findWorkByWorkDvcdNm(deptNm, serviceName);
+        int numCounters = (wicketRepository.getWicketCntByDept(dept, work.getWork_dvcd())).intValue(); // 업무별 창구 수
 
+        int csnlCounter = counselRepository.getCnslCounterCnt(dept, work.getWork_dvcd());
+        // 현재 상담 중인 고객 중 가장 오래된 상담의 남은 시간
+        Integer oldestRemainingTime = getOldestRemainingServiceTime(dept.getDept_id(), work.getWork_dvcd());
+
+
+        // 1. 대기 인원이 없고, 빈 창구가 있을 때
+        if (waitingCount == 0){
+            if(numCounters > 0 && (numCounters > csnlCounter)) {
+                return 0;
+            } else if (numCounters == csnlCounter) {
+                if (oldestRemainingTime < avgCsnlTime) {
+                    return avgCsnlTime - oldestRemainingTime;
+                } else {
+                    return 1; // 1분 미만으로 표시
+                }
+            }
+        }
+        // 대기 인원이 여러 명일 때
+        List<LocalDateTime> times = counselRepository.findByTimeDesc(dept, work.getWork_dvcd());
+        int totalWaitTime = 0;
+        LocalDateTime currentTime = LocalDateTime.now();
+        // 내림차순 정렬된 상담 시작 시간에서 대기 인원 수만큼의 대기 시간을 계산
+        for (int i = 0; i < waitingCount && i < times.size(); i++) {
+            LocalDateTime startTime = times.get(i);
+            int waitTime = (int) Duration.between(startTime, currentTime).toMinutes();
+            totalWaitTime += waitTime;
+        }
+        return totalWaitTime;
+    }
+
+    private int getOldestRemainingServiceTime(String deptId, String serviceCode) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return counselRepository.findMaxWaitTime(currentTime, deptId, serviceCode);
+    }
 }
