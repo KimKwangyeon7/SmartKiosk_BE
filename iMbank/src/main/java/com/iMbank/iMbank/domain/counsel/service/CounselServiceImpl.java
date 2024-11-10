@@ -101,8 +101,8 @@ public class CounselServiceImpl implements CounselService{
     public StartCounselResponse startCounsel(StartCounselRequest startCounselRequest) {
         String todayDate = LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         // 우선 본인 창구의 dvcd = user_dvcd와 같으면서, csnl_cd는 00(대기중)인 애들을 발급 시간 순으로 오름차순
-        Department dept = departmentRepository.findByDeptId(startCounselRequest.dept_id());
-        String wd_dvcd = wicketRepository.findWdDvcdByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
+        Department dept = departmentRepository.findByDeptNM(startCounselRequest.dept_nm()).orElse(null);
+        String wd_dvcd = wicketRepository.findWdDvcdByDeptIdAndWdNum(startCounselRequest.wd_id());
         List<Counsel> counsels = counselRepository.findFirstByDepartmentAndUserDvcdAndCsnlCdOrderByTicketStime(dept, wd_dvcd, "00", todayDate).orElse(null);
         if (counsels == null || counsels.size() == 0){
             return null;
@@ -123,7 +123,7 @@ public class CounselServiceImpl implements CounselService{
         counselRepository.save(counsel);
 
         //출력물에 필요한 내용 반환
-        return new StartCounselResponse(counsel.getCounsel_id(), dept.getDept_id(), wicket.getWd_num(), wicket.getWd_floor(), wicket.getWd_dvcd());
+        return new StartCounselResponse(counsel.getCounsel_id(), startCounselRequest.dept_nm(), wicket.getWd_num(), wicket.getWd_floor(), workRepository.findWorkDvcdNmByDepartmentAndWorkDvcd(startCounselRequest.dept_nm(), wicket.getWd_dvcd()), counsel.getTicket_count());
     }
 
     @Override

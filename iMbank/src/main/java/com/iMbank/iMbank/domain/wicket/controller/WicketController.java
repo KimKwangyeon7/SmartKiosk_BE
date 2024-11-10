@@ -76,7 +76,7 @@ public class WicketController {
 
     @DeleteMapping("/floor/{floor}")
     //@PreAuthorize("hasAuthority('BRANCH')")
-    public ResponseEntity<Message<Void>> moveWicket(@PathVariable int floor) {
+    public ResponseEntity<Message<Void>> deleteFloor(@PathVariable int floor) {
         wicketService.deleteFloor(floor);
         return ResponseEntity.ok().body(Message.success());
     }

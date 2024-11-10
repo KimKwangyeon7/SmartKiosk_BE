@@ -12,8 +12,8 @@ import java.util.List;
 
 @Repository
 public interface WicketRepository extends JpaRepository<Wicket, Integer>, WicketCustom {
-    @Query("SELECT w.wd_dvcd FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum")
-    String findWdDvcdByDeptIdAndWdNum(Department deptId, int wdNum);
+    @Query("SELECT w.wd_dvcd FROM Wicket w WHERE w.wd_id = :wdId")
+    String findWdDvcdByDeptIdAndWdNum(int wdId);
 
     @Query("SELECT w.user_id FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum")
     int findUserIdByDeptIdAndWdNum(Department deptId, int wdNum);

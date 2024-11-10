@@ -39,4 +39,7 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :deptNm AND HOUR(c.csnl_start_dt) = :time AND SUBSTRING(c.crdt, 1, 6) = :month")
     int getCntByTime(Department deptNm, int time, String month);
+
+    @Query("SELECT c FROM Counsel c WHERE c.csnl_cd = '01' AND  c.crdt = :today AND c.department = :dept")
+    List<Counsel> findWicketCounseling(String today, Department dept);
 }

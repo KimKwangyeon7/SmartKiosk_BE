@@ -1,5 +1,6 @@
 package com.iMbank.iMbank.domain.wicket.service;
 
+import com.iMbank.iMbank.domain.counsel.entity.Counsel;
 import com.iMbank.iMbank.domain.counsel.repository.CounselRepository;
 import com.iMbank.iMbank.domain.department.entity.Department;
 import com.iMbank.iMbank.domain.department.repository.DepartmentRepository;
@@ -21,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -78,7 +81,15 @@ public class WicketServiceImpl implements WicketService {
         for (int i : set) {
             floors[cnt++] = i;
         }
-        return new MapLayoutResponse(wicketListInfo, kioskInfo, floors, detail);
+        String todayDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<Counsel> csnlList = counselRepository.findWicketCounseling(todayDate, dept);
+        List<String> res = new ArrayList<>();
+        for (Counsel csnl : csnlList) {
+            int wdId = csnl.getWd_id();
+            int csnlId = csnl.getCounsel_id();
+            res.add(""+wdId + " " + csnlId);
+        }
+        return new MapLayoutResponse(wicketListInfo, kioskInfo, floors, detail, res);
     }
 
     @Override
