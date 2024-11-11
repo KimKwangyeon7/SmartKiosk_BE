@@ -104,10 +104,14 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         // CORS 구성을 위한 CorsConfiguration 객체 생성
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*"); // 모든 출처의 요청을 허용합니다
-        configuration.addAllowedMethod("*");// 모든 HTTP 메서드 (GET, POST 등)를 허용합니다.
-        configuration.addAllowedHeader("*"); // 모든 요청 헤더를 허용합니다.
-        configuration.setAllowCredentials(true); // 크레덴셜(인증정보)을 포함한 요청을 허용합니다.
+
+        // 허용할 도메인을 명시적으로 추가합니다.
+        configuration.addAllowedOrigin("https://smart-kiosk-fe.vercel.app"); // Vercel 프론트엔드 도메인
+        configuration.addAllowedOrigin("https://8llow8llow.com"); // 서버 도메인
+
+        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용 (GET, POST 등)
+        configuration.addAllowedHeader("*"); // 모든 요청 헤더 허용
+        configuration.setAllowCredentials(true); // 인증 정보를 포함한 요청 허용
         configuration.setMaxAge(3600L); // 프리플라이트 요청 캐시 시간
 
         // URL 기반으로 CORS 구성을 설정합니다.
