@@ -70,10 +70,20 @@ public class WicketServiceImpl implements WicketService {
         WicketListInfo wicketListInfo = new WicketListInfo(map);
 
         Kiosk kiosk = kioskRepository.findByDepartment(dept).orElse(null);
-        String[] str = new String[1];
+        String[] str = new String[2];
         str[0] = kiosk.getRowNum() + "," + kiosk.getColNum();
+        str[1] = "5,5";
         Map<Integer, String[]> kmap = new HashMap<>();
         kmap.put(1, str);
+
+        String[] str2 = new String[1];
+        str2[0] = "5,0";
+        kmap.put(2, str2);
+
+        String[] str3 = new String[1];
+        str2[0] = "5,0";
+        kmap.put(3, str2);
+
         KioskInfo kioskInfo = new KioskInfo(kmap);
 
         int[] floors = new int[set.size()];
