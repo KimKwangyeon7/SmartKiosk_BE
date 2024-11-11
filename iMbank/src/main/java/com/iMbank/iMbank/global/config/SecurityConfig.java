@@ -103,8 +103,12 @@ public class SecurityConfig {
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = getCorsConfiguration(3600L);
-        // CORS 구성을 URL 패턴에 매핑합니다. 이 예에서는 애플리케이션의 모든 경로("/**")에 대해 CORS 구성을 적용합니다.
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("https://smart-kiosk-fe.vercel.app"); // Vercel 프론트엔드 도메인만 허용
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
