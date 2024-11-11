@@ -11,6 +11,11 @@ import org.hibernate.annotations.Comment;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {
+        @Index(name = "idx_dept_id", columnList = "dept_id"),
+        @Index(name = "idx_wd_dvcd", columnList = "wd_dvcd"),
+        @Index(name = "idx_wd_num", columnList = "wd_num")
+})
 public class Wicket {
     @Id
     @Comment("창구 아이디")

@@ -48,11 +48,11 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query(value = "SELECT MAX(TIMESTAMPDIFF(MINUTE, csnl_start_dt, :currentTime)) FROM Counsel " +
             "WHERE dept_id = :deptId AND csnl_cd = '01' AND user_dvcd = :serviceCode", nativeQuery = true)
-    Integer findMaxWaitTime(@Param("currentTime") LocalDateTime currentTime, @Param("dept") String deptId, @Param("serviceCode") String serviceCode);
+    Integer findMaxWaitTime(@Param("currentTime") LocalDateTime currentTime, @Param("deptId") String deptId, @Param("serviceCode") String serviceCode);
 
     @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode")
     int getCnslCounterCnt(Department dept, String serviceCode);
 
-    @Query("SELECT c.csnl_start_dt FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode ORDER BY c.csnl_start_dt")
+    @Query("SELECT c.csnl_start_dt FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode AND c.csnl_cd = '01' ORDER BY c.csnl_start_dt")
     List<LocalDateTime> findByTimeDesc(Department dept, String serviceCode);
 }

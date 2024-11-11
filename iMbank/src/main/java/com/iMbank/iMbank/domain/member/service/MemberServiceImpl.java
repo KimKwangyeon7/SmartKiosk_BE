@@ -143,7 +143,11 @@ public class MemberServiceImpl implements MemberService {
             int wait_people = counselRepository.getTotalWaitCnt(kioskId, works.get(i).getWork_dvcd(), "00", todayDate);
             // 대기 시간 구하기: 업무별 평균 대기 시간 * 대기 인원
             Map<String, Double> map = statisticsService.getAvgCsnlTime(departmentRepository.findDeptNameByDeptId(works.get(i).getDepartment().getDept_id())).myAvg();
-            int wait_time = (int) (map.get(works.get(i).getWork_dvcd_nm()) * wait_people);
+            Double val = map.get(works.get(i).getWork_dvcd_nm());
+            if (val == null) {
+                val = 5.0;
+            }
+            int wait_time = (int) (val * wait_people);
             Work w = works.get(i);
             res.add(new ButtonInfoResponse(w.getDepartment().getDept_id(), w.getDept_nm(), w.getWork_dvcd(), w.getWork_dvcd_nm(), wait_time, wait_people, w.getLeft_high(), w.getRight_low(), w.getColor()));
         }
