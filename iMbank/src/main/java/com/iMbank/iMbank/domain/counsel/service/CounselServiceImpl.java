@@ -90,8 +90,15 @@ public class CounselServiceImpl implements CounselService{
         // 대기 인원 구하기 => 업무, 상담코드, 날짜, 키오스크아이디
         int wait_people = counselRepository.getTotalWaitCnt(kiosk.getKiosk_id(), user_dvcd, "00", todayDate)-1;
         // 대기 시간 구하기: 업무별 평균 대기 시간 * 대기 인원
+        int avgCsnlTime = 0;
         Map<String, Double> map = statisticsService.getAvgCsnlTime(ticketInfo.dept_nm()).myAvg();
-        int avgCsnlTime = map.get(workRepository.findWorkByWorkDvcdNm(ticketInfo.dept_nm(),ticketInfo.user_dvcd_nm()).getWork_dvcd()).intValue();
+        Double value = map.get(workRepository.findWorkByWorkDvcdNm(ticketInfo.dept_nm(),ticketInfo.user_dvcd_nm()).getWork_dvcd());
+        if (value != null) {
+            avgCsnlTime = value.intValue();
+            // 이후 로직
+        } else {
+            avgCsnlTime = 5;
+        }
         int wait_time = estimateWaitTime(ticketInfo.dept_nm(), ticketInfo.user_dvcd_nm(), wait_people, avgCsnlTime);
         // 해당 영업점 명 구하기
         String name = ticketInfo.dept_nm();
@@ -162,6 +169,9 @@ public class CounselServiceImpl implements CounselService{
         List<LocalDateTime> times = counselRepository.findByTimeDesc(dept, work.getWork_dvcd());
         int totalWaitTime = 0;
         LocalDateTime currentTime = LocalDateTime.now();
+        if (times == null || times.size() == 0){
+            totalWaitTime = 0;
+        }
         // 내림차순 정렬된 상담 시작 시간에서 대기 인원 수만큼의 대기 시간을 계산
         for (int i = 0; i < waitingCount && i < times.size(); i++) {
             LocalDateTime startTime = times.get(i);
@@ -171,8 +181,9 @@ public class CounselServiceImpl implements CounselService{
         return totalWaitTime;
     }
 
-    private int getOldestRemainingServiceTime(String deptId, String serviceCode) {
+    private Integer getOldestRemainingServiceTime(String deptId, String serviceCode) {
         LocalDateTime currentTime = LocalDateTime.now();
-        return counselRepository.findMaxWaitTime(currentTime, deptId, serviceCode);
+        Integer maxWaitTime = counselRepository.findMaxWaitTime(currentTime, deptId, serviceCode);
+        return (maxWaitTime != null) ? maxWaitTime.intValue() : 0;
     }
 }
