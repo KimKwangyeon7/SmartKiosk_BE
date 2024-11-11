@@ -103,14 +103,17 @@ public class SecurityConfig {
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        // CORS 구성을 위한 CorsConfiguration 객체 생성
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("https://smart-kiosk-fe.vercel.app"); // Vercel 프론트엔드 도메인만 허용
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*"); // 모든 출처의 요청을 허용합니다
+        configuration.addAllowedMethod("*");// 모든 HTTP 메서드 (GET, POST 등)를 허용합니다.
+        configuration.addAllowedHeader("*"); // 모든 요청 헤더를 허용합니다.
+        configuration.setAllowCredentials(true); // 크레덴셜(인증정보)을 포함한 요청을 허용합니다.
+        configuration.setMaxAge(3600L); // 프리플라이트 요청 캐시 시간
 
+        // URL 기반으로 CORS 구성을 설정합니다.
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 위에서 정의한 CORS 구성을 적용합니다.
         return source;
     }
 
@@ -122,13 +125,16 @@ public class SecurityConfig {
      */
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilterRegistrationBean() {
-        CorsConfiguration config = getCorsConfiguration(6000L);
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // 쿠키 사용 활성화
+        config.addAllowedOriginPattern("*");    // 모든 출처의 요청을 허용합니다
+        config.addAllowedHeader("*"); // 모든 헤더 허용
+        config.addAllowedMethod("*"); // 모든 HTTP 메소드 허용
+        config.setMaxAge(6000L); // 프리플라이트 요청 캐시 시간 설정
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // 애플리케이션의 모든 경로("/**")에 대해 CORS 구성을 적용합니다.
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> filterBean = new FilterRegistrationBean<>(
                 new CorsFilter(source));
-        // 필터 체인에서의 실행 순서를 설정합니다. 숫자가 낮을수록 먼저 실행됩니다.
         filterBean.setOrder(0); // 필터 체인에서의 순서 설정
         return filterBean;
     }
