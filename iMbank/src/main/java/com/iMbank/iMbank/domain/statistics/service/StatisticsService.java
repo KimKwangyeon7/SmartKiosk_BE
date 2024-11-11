@@ -17,4 +17,5 @@ public interface StatisticsService {
     AvgWaitTimeResponse getAvgWaitTime(String deptNm);
     YearCntResponse getYearCnt(String deptNm);
     Map<String, List<Long>> getAvgCntByMonth(String deptNm, String year, String Month);
+    DailyTalkResponse getAITalk(String deptNm);
 }

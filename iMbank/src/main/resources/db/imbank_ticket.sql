@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: imbank
+-- Host: 127.0.0.1    Database: imbank
 -- ------------------------------------------------------
 -- Server version	8.0.37
 
@@ -31,7 +31,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`id`),
   KEY `FKqc0trxp9dieq4a9b7norrxd8i` (`kiosk_id`),
   CONSTRAINT `FKqc0trxp9dieq4a9b7norrxd8i` FOREIGN KEY (`kiosk_id`) REFERENCES `kiosk` (`kiosk_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
+INSERT INTO `ticket` VALUES (102,1,1,'20241111','00'),(200,2,1,'20241111','01');
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-08 16:44:29
+-- Dump completed on 2024-11-11 22:47:02

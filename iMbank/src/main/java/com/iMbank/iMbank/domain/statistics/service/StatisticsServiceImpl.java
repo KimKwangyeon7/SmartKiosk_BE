@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +198,56 @@ public class StatisticsServiceImpl implements StatisticsService {
             }
         }
         return map;
+    }
+
+    @Override
+    public DailyTalkResponse getAITalk(String deptNm) {
+
+        // 일주일 중 가장 바쁜 요일
+        Map<String, Double> map = getDailyCnt(deptNm).myAvg();
+        int max = 0;
+        String res = "";
+        for (String day: map.keySet()){
+            if (map.get(day) > max){
+                res = day;
+            }
+        }
+        if (res == null){
+            res = "수";
+        }
+
+        // 오늘 방문자 수는 ~명입니다.
+        Department dept = departmentRepository.findByDeptNM(deptNm).orElse(null);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String today = now.format(formatter);
+
+        Integer todayVisit = counselRepository.getTotalCountByDeptNm(dept, today);
+        if (todayVisit == null){
+            todayVisit = 0;
+        }
+
+        // 오늘 현재 평균 대기시간은 ~분이빈다.
+        Integer todayWatiAvg = counselRepository.getTodayWatiAvg(dept, today);
+        if(todayWatiAvg == null){
+            todayWatiAvg = 0;
+        }
+
+        int time = 0;
+        int maxTime = 0;
+        //시간대별
+        Map<Integer, Double> timeMap = getAvgCntByTime(deptNm);
+        for (int cnt: timeMap.keySet()) {
+            if (timeMap.get(cnt) > maxTime) {
+                time = timeMap.get(cnt).intValue();
+            }
+        }
+        if (time == 0){
+            time = 15;
+        }
+        String etime = departmentRepository.getCloseTime(deptNm);
+
+        return new DailyTalkResponse(res, todayVisit, todayWatiAvg, time, etime);
     }
 
     // 지난 4달 동안의 시간대별 고객 수

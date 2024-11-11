@@ -24,4 +24,7 @@ public interface DepartmentRepository extends JpaRepository<Department, String> 
 
     @Query("SELECT d.etime from Department d WHERE d.dept_nm = :deptNm")
     String findEtimeByDeptNm(String deptNm);
+
+    @Query("SELECT d.etime FROM Department d WHERE d.dept_nm = :deptNm")
+    String getCloseTime(String deptNm);
 }

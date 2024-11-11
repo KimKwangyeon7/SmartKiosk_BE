@@ -92,4 +92,10 @@ public class StatisticsController {
         Map<String, Long> map = statisticsService.getWicketPercentage(deptNm);
         return ResponseEntity.ok().body(Message.success(map));
     }
+
+    @PostMapping("/talk")
+    public ResponseEntity<Message<DailyTalkResponse>> getAITalk(@RequestParam String deptNm) {
+        DailyTalkResponse map = statisticsService.getAITalk(deptNm);
+        return ResponseEntity.ok().body(Message.success(map));
+    }
 }

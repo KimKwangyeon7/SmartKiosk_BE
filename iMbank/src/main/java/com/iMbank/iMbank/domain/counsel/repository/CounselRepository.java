@@ -55,4 +55,10 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
 
     @Query("SELECT c.csnl_start_dt FROM Counsel c WHERE c.department = :dept AND c.user_dvcd = :serviceCode AND c.csnl_cd = '01' ORDER BY c.csnl_start_dt")
     List<LocalDateTime> findByTimeDesc(Department dept, String serviceCode);
+
+    @Query("SELECT COUNT(c.counsel_id) FROM Counsel c WHERE c.department = :dept AND c.crdt = :today")
+    Integer getTotalCountByDeptNm(Department dept, String today);
+
+    @Query("SELECT AVG(c.wait_time) FROM Counsel c WHERE c.department = :dept AND c.crdt = :today")
+    Integer getTodayWatiAvg(Department dept, String today);
 }
