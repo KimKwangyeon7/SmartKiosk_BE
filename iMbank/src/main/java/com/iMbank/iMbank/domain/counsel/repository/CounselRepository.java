@@ -46,7 +46,7 @@ public interface CounselRepository extends JpaRepository<Counsel, Integer>, Coun
     @Query("SELECT c FROM Counsel c WHERE c.csnl_cd = '01' AND  c.crdt = :today AND c.department = :dept")
     List<Counsel> findWicketCounseling(String today, Department dept);
 
-    @Query(value = "SELECT MAX(TIMESTAMPDIFF(MINUTE, csnl_start_dt, :currentTime)) FROM Counsel " +
+    @Query(value = "SELECT MAX(TIMESTAMPDIFF(MINUTE, csnl_start_dt, :currentTime)) FROM counsel " +
             "WHERE dept_id = :deptId AND csnl_cd = '01' AND user_dvcd = :serviceCode", nativeQuery = true)
     Integer findMaxWaitTime(@Param("currentTime") LocalDateTime currentTime, @Param("deptId") String deptId, @Param("serviceCode") String serviceCode);
 

@@ -135,7 +135,7 @@ public class SecurityConfig {
                 new CorsFilter(source));
         filterBean.setOrder(0); // 필터 체인에서의 순서 설정
         return filterBean;
-    }   
+    }
 
     /**
      * CORS 정책 구성을 위한 CorsConfiguration 객체를 생성하고 구성합니다.
