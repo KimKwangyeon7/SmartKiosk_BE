@@ -39,14 +39,14 @@ public class WicketController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Integer>> createWicket(@RequestBody CreateWicketRequest createWicketRequest) {
         System.out.println(createWicketRequest);
         return ResponseEntity.ok().body(Message.success(wicketService.createWicket(createWicketRequest)));
     }
 
     @DeleteMapping("/{wdId}")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteWicket(@PathVariable int wdId) {
         System.out.println(wdId);
         wicketService.deleteWicket(wdId);
@@ -54,7 +54,7 @@ public class WicketController {
     }
 
     @PatchMapping("/info")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> updateWicket(@RequestParam String code) {
         System.out.println(code);
         wicketService.updateWicket(code);
@@ -62,21 +62,21 @@ public class WicketController {
     }
 
     @PatchMapping("/move")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> moveWicket(@RequestBody WicketMoveRequest wicketMoveRequest) {
         wicketService.moveWicket(wicketMoveRequest);
         return ResponseEntity.ok().body(Message.success());
     }
 
     @PatchMapping("/kiosk/move")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> moveKiosk(@RequestBody KioskMoveRequest kioskMoveRequest) {
         wicketService.moveKiosk(kioskMoveRequest);
         return ResponseEntity.ok().body(Message.success());
     }
 
     @DeleteMapping("/floor/{floor}")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteFloor(@PathVariable int floor) {
         wicketService.deleteFloor(floor);
         return ResponseEntity.ok().body(Message.success());

@@ -47,7 +47,7 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    @PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> logoutMember(@AuthenticationPrincipal MemberLoginActive loginActive,
                                                       HttpServletResponse response) {
         memberService.logoutMember(loginActive.email());;
@@ -60,7 +60,7 @@ public class MemberController {
     }
 
     @GetMapping("/get")
-    @PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
     public ResponseEntity<Message<MemberInfo>> getMember(@AuthenticationPrincipal MemberLoginActive loginActive) {
         MemberInfo info = memberService.getMember(loginActive.id());
         return ResponseEntity.ok().body(Message.success(info));
@@ -68,7 +68,7 @@ public class MemberController {
 
 
     @DeleteMapping("")
-    @PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('HEADQUARTER') or hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteMember(@AuthenticationPrincipal MemberLoginActive loginActive) {
         memberService.deleteMember(loginActive.id());
         return ResponseEntity.ok().body(Message.success());
@@ -83,7 +83,7 @@ public class MemberController {
 
     // 버튼 추가
     @PostMapping("/button")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> addButton(@RequestBody CreateButtonRequest createButtonRequest) {
         memberService.addButton(createButtonRequest);
         return ResponseEntity.ok().body(Message.success());
@@ -92,7 +92,7 @@ public class MemberController {
 
     // 버튼 수정
     @PatchMapping("/button")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> modifyButton(@RequestBody ModifyButtonRequest modifyButtonRequest) {
         memberService.modifyButton(modifyButtonRequest);
         return ResponseEntity.ok().body(Message.success());
@@ -100,7 +100,7 @@ public class MemberController {
 
     // 버튼 삭제
     @DeleteMapping("/button/{deptNm}/{workDvcdNm}")
-    @PreAuthorize("hasAuthority('BRANCH')")
+    //@PreAuthorize("hasAuthority('BRANCH')")
     public ResponseEntity<Message<Void>> deleteButton(@AuthenticationPrincipal MemberLoginActive loginActive,
                                                         @PathVariable String deptNm, @PathVariable String workDvcdNm) {
         CreateButtonRequest createButtonRequest = new CreateButtonRequest(deptNm, workDvcdNm, "", "", 0);
