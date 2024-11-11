@@ -100,19 +100,11 @@ public class SecurityConfig {
      *
      * @return CorsConfigurationSource 객체
      */
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = getCorsConfiguration(3600L);
-//        // CORS 구성을 URL 패턴에 매핑합니다. 이 예에서는 애플리케이션의 모든 경로("/**")에 대해 CORS 구성을 적용합니다.
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         // CORS 구성을 위한 CorsConfiguration 객체 생성
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // 모든 출처의 요청을 허용합니다
+        configuration.addAllowedOriginPattern("*"); // 모든 출처의 요청을 허용합니다
         configuration.addAllowedMethod("*");// 모든 HTTP 메서드 (GET, POST 등)를 허용합니다.
         configuration.addAllowedHeader("*"); // 모든 요청 헤더를 허용합니다.
         configuration.setAllowCredentials(true); // 크레덴셜(인증정보)을 포함한 요청을 허용합니다.
@@ -123,30 +115,17 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 위에서 정의한 CORS 구성을 적용합니다.
         return source;
     }
-
     /**
      * CORS 필터를 스프링 부트 애플리케이션의 필터 체인에 등록합니다.
      * 이를 통해 모든 들어오는 요청에 대해 CORS 정책이 적용되도록 합니다.
      *
      * @return FilterRegistrationBean 객체로, 스프링 부트가 관리하는 필터 체인에 CORS 필터를 등록하기 위해 사용됩니다.
      */
-//    @Bean
-//    public FilterRegistrationBean<CorsFilter> corsFilterRegistrationBean() {
-//        CorsConfiguration config = getCorsConfiguration(6000L);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        // 애플리케이션의 모든 경로("/**")에 대해 CORS 구성을 적용합니다.
-//        source.registerCorsConfiguration("/**", config);
-//        FilterRegistrationBean<CorsFilter> filterBean = new FilterRegistrationBean<>(
-//                new CorsFilter(source));
-//        // 필터 체인에서의 실행 순서를 설정합니다. 숫자가 낮을수록 먼저 실행됩니다.
-//        filterBean.setOrder(0); // 필터 체인에서의 순서 설정
-//        return filterBean;
-//    }
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilterRegistrationBean() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 쿠키 사용 활성화
-        config.addAllowedOrigin("*");    // 모든 출처의 요청을 허용합니다
+        config.addAllowedOriginPattern("*");    // 모든 출처의 요청을 허용합니다
         config.addAllowedHeader("*"); // 모든 헤더 허용
         config.addAllowedMethod("*"); // 모든 HTTP 메소드 허용
         config.setMaxAge(6000L); // 프리플라이트 요청 캐시 시간 설정
@@ -156,7 +135,7 @@ public class SecurityConfig {
                 new CorsFilter(source));
         filterBean.setOrder(0); // 필터 체인에서의 순서 설정
         return filterBean;
-    }
+    }   
 
     /**
      * CORS 정책 구성을 위한 CorsConfiguration 객체를 생성하고 구성합니다.
