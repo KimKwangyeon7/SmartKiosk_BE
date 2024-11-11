@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
--- Host: localhost    Database: imbank
+-- Host: 127.0.0.1    Database: imbank
 -- ------------------------------------------------------
 -- Server version	8.0.37
 
@@ -40,7 +40,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'강남','user1@example.com','Alice','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(2,'강남','user2@example.com','Bob','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(3,'강남','user3@example.com','James','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(4,'홍대','user4@example.com','Bronny','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(5,'홍대','user5@example.com','Durant','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(6,'부산','user6@example.com','Westbrook','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(7,'대전','user7@example.com','Davis','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(8,'대전','user8@example.com','Beal','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(9,'인천','user9@example.com','Oscar','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(10,'인천','user10@example.com','Jordan','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(11,'대구','jspark13@naver.com','박지성','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'HEADQUARTER'), (12,'대구','kwang9705@naver.com','김광연','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'HEADQUARTER');
+INSERT INTO `member` VALUES (1,'강남','user1@example.com','Alice','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(2,'강남','user2@example.com','Bob','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(3,'강남','user3@example.com','James','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(4,'홍대','user4@example.com','Bronny','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(5,'홍대','user5@example.com','Durant','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(6,'부산','user6@example.com','Westbrook','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(7,'대전','user7@example.com','Davis','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(8,'대전','user8@example.com','Beal','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(9,'인천','user9@example.com','Oscar','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(10,'인천','user10@example.com','Jordan','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'BRANCH'),(11,'대구','jspark13@naver.com','박지성','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'HEADQUARTER'),(12,'대구','kwang9705@naver.com','김광연','$2a$10$lXHWXkbDeYu8KdAeNBwQKeAbs3SctSy1sn5S2vzsQy8ttCl5xuez6',NULL,'HEADQUARTER');
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-08 16:44:30
+-- Dump completed on 2024-11-11 14:29:09

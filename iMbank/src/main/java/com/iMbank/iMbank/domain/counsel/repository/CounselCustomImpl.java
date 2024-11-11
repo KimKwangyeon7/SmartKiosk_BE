@@ -192,8 +192,7 @@ public class CounselCustomImpl implements CounselCustom {
                     .from(c)
                     .where(c.department.eq(dept)
                             .and(c.user_dvcd.eq(code))
-                            .and(c.crdt.eq(year+month+str))
-                            .and(c.csnl_cd.eq("02")))
+                            .and(c.crdt.eq(year+month+str)))
                     .fetchOne();
             count = count != null ? count : 0;
             list.add(count);

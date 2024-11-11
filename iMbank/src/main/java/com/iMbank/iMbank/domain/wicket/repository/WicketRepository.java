@@ -15,11 +15,11 @@ public interface WicketRepository extends JpaRepository<Wicket, Integer>, Wicket
     @Query("SELECT w.wd_dvcd FROM Wicket w WHERE w.wd_id = :wdId")
     String findWdDvcdByDeptIdAndWdNum(int wdId);
 
-    @Query("SELECT w.user_id FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum")
-    int findUserIdByDeptIdAndWdNum(Department deptId, int wdNum);
+    @Query("SELECT w.user_id FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum AND w.wd_floor = :floor")
+    int findUserIdByDeptIdAndWdNum(Department deptId, int wdNum, int floor);
 
-    @Query("SELECT w FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum")
-    Wicket findByDeptIdAndWdNum(Department deptId, int wdNum);
+    @Query("SELECT w FROM Wicket w WHERE w.department = :deptId AND w.wd_num = :wdNum AND w.wd_floor = :floor")
+    Wicket findByDeptIdAndWdNum(Department deptId, int wdNum, int floor);
 
     @Query("SELECT COUNT(w.wd_id) FROM Wicket w WHERE w.department = :deptId AND w.wd_dvcd = :code")
     Long getWicketCntByDept(Department deptId, String code);

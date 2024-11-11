@@ -118,8 +118,8 @@ public class CounselServiceImpl implements CounselService{
         }
         Counsel counsel = counsels.get(0);
         // 해당 상담의 상태 변경 - 상담코드, 상담 시작 시간, 대기 시간
-        int user_id = wicketRepository.findUserIdByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
-        Wicket wicket = wicketRepository.findByDeptIdAndWdNum(dept, startCounselRequest.wd_num());
+        int user_id = wicketRepository.findUserIdByDeptIdAndWdNum(dept, startCounselRequest.wd_num(), startCounselRequest.floor());
+        Wicket wicket = wicketRepository.findByDeptIdAndWdNum(dept, startCounselRequest.wd_num(), startCounselRequest.floor());
         Member member = memberRepository.findById((long) user_id).orElse(null);
 
 // startCounsel 메서드 호출로 상담 시작 설정
